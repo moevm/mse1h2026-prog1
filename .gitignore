@@ -1,0 +1,11 @@
+__pycache__/
+*.o
+*.obj
+*.elf
+*.lib
+*.a
+*.la
+*.lo
+*.so
+*.so.*
+*.out
