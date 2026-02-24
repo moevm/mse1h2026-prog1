@@ -42,7 +42,7 @@ class Task1_1_1_FlagByStage(BaseTaskClass):
         if not self.solution or not self.solution.strip():
             return "Ошибка: ответ не может быть пустым."
         if not self.solution.strip().startswith("-"):
-            return "Ошибка: ожидается флаг вида -E, -S или -c"
+            return "Ошибка: ожидается флаг -?"
         return None
 
     def compile(self) -> Optional[str]:
