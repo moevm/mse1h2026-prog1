@@ -21,11 +21,19 @@ class Task1_1_1_FlagByStage(BaseTaskClass):
         self._rng = random.Random(seed)
         self.stage: Optional[str] = None
         self.correct_answer: Optional[str] = None
+        self._task_generated: bool = False
 
     def generate_task(self) -> str:
+        if self._task_generated:  
+            return self._cached_task_text
+        
         self.stage = self._rng.choice(list(STAGE_TO_FLAG.keys()))
         self.correct_answer = STAGE_TO_FLAG[self.stage]
-        return f"Какой флаг gcc останавливает сборку после этапа {self.stage}?"
+        
+        self._cached_task_text = f"Какой флаг gcc останавливает сборку после этапа {self.stage}?"
+        self._task_generated = True
+        
+        return self._cached_task_text
 
     def _generate_tests(self):
         self.tests = [TestItem(
@@ -73,11 +81,19 @@ class Task1_1_2_ExtByStage(BaseTaskClass):
         self._rng = random.Random(seed)
         self.stage: Optional[str] = None
         self.correct_answer: Optional[str] = None
+        self._task_generated: bool = False
 
     def generate_task(self) -> str:
+        if self._task_generated:
+            return self._cached_task_text
+        
         self.stage = self._rng.choice(list(STAGE_TO_EXT.keys()))
         self.correct_answer = STAGE_TO_EXT[self.stage]
-        return f"Какое расширение получит файл после этапа {self.stage}?"
+        
+        self._cached_task_text = f"Какое расширение получит файл после этапа {self.stage}?"
+        self._task_generated = True
+        
+        return self._cached_task_text
 
     def _generate_tests(self):
         self.tests = [TestItem(
@@ -125,12 +141,20 @@ class Task1_1_3_StageByAction(BaseTaskClass):
         self._rng = random.Random(seed)
         self.action: Optional[str] = None
         self.correct_answer: Optional[str] = None
+        self._task_generated: bool = False
 
     def generate_task(self) -> str:
+        if self._task_generated:
+            return self._cached_task_text
+        
         stage = self._rng.choice(list(STAGE_ACTIONS.keys()))
         self.action = self._rng.choice(STAGE_ACTIONS[stage])
         self.correct_answer = stage.capitalize()
-        return f"На каком этапе сборки {self.action}?"
+        
+        self._cached_task_text = f"На каком этапе сборки {self.action}?"
+        self._task_generated = True
+        
+        return self._cached_task_text
 
     def _generate_tests(self):
         self.tests = [TestItem(
@@ -274,14 +298,22 @@ class Task1_2_1_GccCommandByStage(BaseTaskClass):
         self.file_name: str = f"prog{seed}"
         self.stage: Optional[str] = None
         self.correct_answer: Optional[str] = None
+        self._task_generated: bool = False
 
     def generate_task(self) -> str:
+        if self._task_generated:
+            return self._cached_task_text
+        
         self.stage = self._rng.choice(list(STAGE_TO_FLAG.keys()))
         ext = STAGE_TO_EXT[self.stage]
         flag = STAGE_TO_FLAG[self.stage]
         self.correct_answer = f"gcc {flag} {self.file_name}.c -o {self.file_name}{ext}"
-        return f"Дан файл {self.file_name}.c Напишите команду gcc, чтобы выполнить только {self.stage} и сохранить результат в {self.file_name}{ext}"
-
+        
+        self._cached_task_text = f"Дан файл {self.file_name}.c Напишите команду gcc, чтобы выполнить только {self.stage} и сохранить результат в {self.file_name}{ext}"
+        self._task_generated = True
+        
+        return self._cached_task_text
+    
     def _generate_tests(self):
         self.tests = [TestItem(
             input_str=self.solution,
@@ -385,8 +417,12 @@ class Task1_2_3_OutputFileByFlag(BaseTaskClass):
         self.file_name: str = f"test{seed}"
         self.flag: Optional[str] = None
         self.correct_answer: Optional[str] = None
+        self._task_generated: bool = False 
 
     def generate_task(self) -> str:
+        if self._task_generated:
+            return self._cached_task_text
+        
         flags = ["-E", "-S", "-c", ""]
         self.flag = self._rng.choice(flags)
         
@@ -400,7 +436,10 @@ class Task1_2_3_OutputFileByFlag(BaseTaskClass):
             self.correct_answer = "a.out"
         
         flag_str = self.flag if self.flag else "(без флага)"
-        return f"Дана команда gcc {flag_str} {self.file_name}.c. Какой файл будет создан, если не указать -o?"
+        self._cached_task_text = f"Дана команда gcc {flag_str} {self.file_name}.c. Какой файл будет создан, если не указать -o?"
+        self._task_generated = True
+        
+        return self._cached_task_text
 
     def _generate_tests(self):
         self.tests = [TestItem(
@@ -516,8 +555,12 @@ class Task1_2_5_ErrorStageChoice(BaseTaskClass):
         self.code: Optional[str] = None
         self.correct_stage: Optional[str] = None
         self.correct_error: Optional[str] = None
+        self._task_generated: bool = False
 
     def generate_task(self) -> str:
+        if self._task_generated:
+            return self._cached_task_text
+        
         pattern = ERROR_PATTERNS[self.pattern_idx]
         
         self.code = pattern["code"].format(
@@ -531,7 +574,10 @@ class Task1_2_5_ErrorStageChoice(BaseTaskClass):
         self.correct_stage = pattern["stage"]
         self.correct_error = pattern["error"]
         
-        return f"Дан файл test.c:\n```c\n{self.code}\n```\nНа каком этапе сборки возникнет ошибка? И какая?\n\nВарианты этапа:\na) Препроцессинг\nb) Компиляция\nc) Ассемблирование\nd) Линковка\n\nВарианты ошибки:\na) Файл не найден\nb) Синтаксическая ошибка\nc) Неразрешённый символ\nd) Повторное определение"
+        self._cached_task_text = f"Дан файл test.c:\n```c\n{self.code}\n```\nНа каком этапе сборки возникнет ошибка? И какая?\n\nВарианты этапа:\na) Препроцессинг\nb) Компиляция\nc) Ассемблирование\nd) Линковка\n\nВарианты ошибки:\na) Файл не найден\nb) Синтаксическая ошибка\nc) Неразрешённый символ\nd) Повторное определение"
+        self._task_generated = True
+        
+        return self._cached_task_text
 
     def _generate_tests(self):
         self.tests = [TestItem(
@@ -642,8 +688,12 @@ class Task1_3_2_ContinueBuild(BaseTaskClass):
         self.flag: Optional[str] = None
         self.intermediate_file: Optional[str] = None
         self.correct_answer: Optional[str] = None
+        self._task_generated: bool = False
 
     def generate_task(self) -> str:
+        if self._task_generated:
+            return self._cached_task_text
+        
         flags_files = [
             ("-E", f"{self.file_name}.i"),
             ("-S", f"{self.file_name}.s"),
@@ -652,7 +702,10 @@ class Task1_3_2_ContinueBuild(BaseTaskClass):
         self.flag, self.intermediate_file = self._rng.choice(flags_files)
         self.correct_answer = f"gcc {self.intermediate_file} -o {self.prog_name}"
         
-        return f"Дан файл {self.file_name}.c. Студент выполнил команду gcc {self.flag} {self.file_name}.c и получил файл {self.intermediate_file}. Напишите команду gcc, чтобы продолжить сборку с этого места и получить исполняемый файл {self.prog_name}."
+        self._cached_task_text = f"Дан файл {self.file_name}.c. Студент выполнил команду gcc {self.flag} {self.file_name}.c и получил файл {self.intermediate_file}. Напишите команду gcc, чтобы продолжить сборку с этого места и получить исполняемый файл {self.prog_name}."
+        self._task_generated = True
+        
+        return self._cached_task_text
 
     def _generate_tests(self):
         self.tests = [TestItem(
