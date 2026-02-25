@@ -24,8 +24,8 @@ class CompileCommandTask(BaseTaskClass):
 
     def generate_task(self) -> str:
         return(
-            f"В текущей директории находится файл {self.file_name}.c, "
-            f"который выводит на экран сообщение \"Hello, world!\". "
+            f"В текущей директории находится файл {self.file_name}.c, который выводит на экран "
+            f"сообщение \"Hello, world!\". "
             f"Какую команду нужно ввести для компиляции, чтобы исполняемый файл назывался {self.file_name}?"
         )
 
