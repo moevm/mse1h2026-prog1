@@ -1,4 +1,4 @@
-from .base_module.base_task import BaseTaskClass
+from .base_module import BaseTaskClass, CLIParser
 import importlib
 import os
 import sys
@@ -14,9 +14,7 @@ def __load_task_modules():
                 mod = importlib.import_module(f".{name}", package_name)
                 
                 for obj_name, obj in inspect.getmembers(mod):
-                    if (inspect.isclass(obj) and 
-                        issubclass(obj, BaseTaskClass) and 
-                        obj is not BaseTaskClass):
+                    if (isinstance(obj, (BaseTaskClass, CLIParser))):
                         
                         setattr(sys.modules[__name__], obj_name, obj)
             except Exception as e:
