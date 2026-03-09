@@ -22,6 +22,11 @@ class Module2BuildStagesTask1(BaseTaskClass):
         self.generate_task()
         return self.task_text
 
+    def load_student_solution(self, solution):
+        if not solution.strip():
+            raise ValueError("Решение пустое.")
+        self.student_solution = solution.strip()
+
     def check(self):
         if getattr(self, "student_solution", "").strip():
             return True, "OK: Заглушка."
