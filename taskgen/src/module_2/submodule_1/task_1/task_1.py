@@ -1,4 +1,4 @@
-from base_module.base_task import BaseTaskClass
+from src.base_module.base_task import BaseTaskClass
 import random
 
 class Module2BuildStagesTask1(BaseTaskClass):
