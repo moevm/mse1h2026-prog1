@@ -1,5 +1,4 @@
 from .base_module import BaseTaskClass, CLIParser
-from .module_2.submodule_1.task_1 import cli_parser as module_2_submodule_1_task_1_cli
 import importlib
 import os
 import sys
