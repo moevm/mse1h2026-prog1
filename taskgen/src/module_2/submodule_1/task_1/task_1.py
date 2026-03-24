@@ -10,6 +10,8 @@ class Module2BuildStagesTask1(BaseTaskClass):
         "удаляются комментарии",
     )
 
+    _EXPECTED_ANSWER = "препроцессинг"
+
     def _pick_variant(self) -> tuple[str, str]:
         rng = random.Random(self.seed)
         return rng.choice(self._ACTIONS)
@@ -19,7 +21,6 @@ class Module2BuildStagesTask1(BaseTaskClass):
         self.task_text = (
             f"На каком этапе сборки выполняется действие: {action}?"
         )
-        self._expected_answer = "Препроцессинг"
 
     def init_task(self):
         self.generate_task()
@@ -32,8 +33,8 @@ class Module2BuildStagesTask1(BaseTaskClass):
 
     def check(self):
         student_answer = getattr(self, "student_solution", "").strip().lower()
-        expected = self._expected_answer.lower()
+        expected = self._EXPECTED_ANSWER.lower()
         
         if student_answer == expected:
             return True, "OK: Верный ответ."
-        return False, f"FAIL: Ожидался ответ '{self._expected_answer}'."
+        return False, f"FAIL: Неверный ответ."
