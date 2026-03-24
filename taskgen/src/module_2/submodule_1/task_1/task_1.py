@@ -2,21 +2,24 @@ from src.base_module.base_task import BaseTaskClass
 import random
 
 class Module2BuildStagesTask1(BaseTaskClass):
-    _VARIANTS = (
-        ("препроцессинга", "-E"),
-        ("компиляции", "-S"),
-        ("ассемблирования", "-c"),
+    """Задание №1.1.3"""
+    _ACTIONS = (
+        "раскрываются директивы",
+        "раскрываются макросы",
+        "обрабатывается условная компиляция",
+        "удаляются комментарии",
     )
 
     def _pick_variant(self) -> tuple[str, str]:
         rng = random.Random(self.seed)
-        return rng.choice(self._VARIANTS)
+        return rng.choice(self._ACTIONS)
     
     def generate_task(self):
-        stage, _expected_flag = self._pick_variant()
+        action = self._pick_variant()
         self.task_text = (
-            f"Какой флаг gcc останавливает сборку после этапа {stage}?"
+            f"На каком этапе сборки выполняется действие: `{action}`?"
         )
+        self._expected_answer = "Препроцессинг"
 
     def init_task(self):
         self.generate_task()
@@ -28,6 +31,9 @@ class Module2BuildStagesTask1(BaseTaskClass):
         self.student_solution = solution.strip()
 
     def check(self):
-        if getattr(self, "student_solution", "").strip():
-            return True, "OK: Заглушка."
-        return False, "FAIL: Пустое решение."
+        student_answer = getattr(self, "student_solution", "").strip().lower()
+        expected = self._expected_answer.lower()
+        
+        if student_answer == expected:
+            return True, "OK: Верный ответ."
+        return False, f"FAIL: Ожидался ответ '{self._expected_answer}'."
