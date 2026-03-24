@@ -18,7 +18,7 @@ class Module2BuildStagesTask2(BaseTaskClass):
     def generate_task(self):
         action = self._pick_variant()
         self.task_text = (
-            f"На каком этапе сборки выполняется действие: {action}?"
+            f"На каком этапе сборки {action}?"
         )
 
     def init_task(self):
