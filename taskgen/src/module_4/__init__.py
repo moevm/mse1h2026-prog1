@@ -1,30 +1,12 @@
-
-from .validator import (
-    StructDeclarationTask,
-    StructInitTask,
-    StructFieldAccessTask,
-    StructAlignmentTask,
-    StructPaddingTask,
-    StructSizeofTask,
-    UnionUsageTask,
-    UnionMemoryOverlapTask,
-    UnionVsStructTask,
-    EnumDefaultValuesTask,
-    EnumExplicitValuesTask,
-    TASK_REGISTRY,
-)
+from .submodule_1.task_1 import StructDeclTask, StructDeclCLIParser
+from .submodule_1.task_2 import StructInitTask, StructInitCLIParser
+from .submodule_1.task_3 import StructAccessTask, StructAccessCLIParser
 
 __all__ = [
-    "StructDeclarationTask",
+    "StructDeclTask",
+    "StructDeclCLIParser",
     "StructInitTask",
-    "StructFieldAccessTask",
-    "StructAlignmentTask",
-    "StructPaddingTask",
-    "StructSizeofTask",
-    "UnionUsageTask",
-    "UnionMemoryOverlapTask",
-    "UnionVsStructTask",
-    "EnumDefaultValuesTask",
-    "EnumExplicitValuesTask",
-    "TASK_REGISTRY",
+    "StructInitCLIParser",
+    "StructAccessTask",
+    "StructAccessCLIParser",
 ]
