@@ -1,8 +1,5 @@
-from .task_1 import CompileCommandTask
-from .task_2 import StartCommandTask
-from .task_3 import CountMainFunctionTask
-from .task_4 import PrintProgramTask
-from .task_5 import TypeOfFunctionTask
-from .task_6 import CountArgvTask
-from .task_7 import ErrorPlaceTask
-from .task_8 import DefFunctionTask
+from .submodule_5.task_1 import cli_parser, Module_1_Submodule_5_task_1
+from .submodule_6.task_1 import cli_parser, Module_1_Submodule_6_task_1
+from .submodule_8.task_1 import cli_parser, Module_1_Submodule_8_task_1
+
+__all__ = ["cli_parser", "Module_1_Submodule_5_task_1", "Module_1_Submodule_6_task_1", "Module_1_Submodule_8_task_1"]
