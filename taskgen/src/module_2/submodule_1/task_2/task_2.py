@@ -1,16 +1,15 @@
 from src.base_module.base_task import BaseTaskClass
 import random
 
-class Module2BuildStagesTask1(BaseTaskClass):
-    """Задание №1.1.3"""
+class Module2BuildStagesTask2(BaseTaskClass):
+    """Задание №1.2.3"""
     _ACTIONS = (
-        "раскрываются директивы",
-        "раскрываются макросы",
-        "обрабатывается условная компиляция",
-        "удаляются комментарии",
+        "проверяется синтаксис программы",
+        "выполняется оптимизация программы",
+        "генерируется ассемблерный код",
     )
 
-    _EXPECTED_ANSWER = "препроцессинг"
+    _EXPECTED_ANSWER = "компиляция"
 
     def _pick_variant(self) -> tuple[str, str]:
         rng = random.Random(self.seed)
