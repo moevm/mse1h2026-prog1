@@ -1,4 +1,5 @@
 from .base_module import BaseTaskClass, CLIParser
+from .token import generate_answer_token
 import importlib
 import os
 import sys
