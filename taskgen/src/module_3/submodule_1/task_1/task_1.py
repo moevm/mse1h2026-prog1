@@ -11,7 +11,7 @@ VARIANTS = (
     ("глобальная переменная без инициализации", "BSS")
 )
 
-class Task1(BaseTaskClass):
+class Module3_Submodule1_Task1(BaseTaskClass):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.rng = random.Random(self.seed)
@@ -55,6 +55,6 @@ class Task1(BaseTaskClass):
             if self.student_solution.strip().lower() == self.correct.lower():
                 return True, "OK: Верный ответ."
             else:
-                return False, f"FAIL: Ожидалось {self.correct}, получено {self.student_solution}"
+                return False, f"FAIL: FAIL: Ответ неверный."
         except Exception as e:
             return False, f"FAIL: {str(e)}"
