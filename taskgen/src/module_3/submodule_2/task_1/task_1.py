@@ -2,29 +2,32 @@ from typing import Optional
 import random
 from src.base_module.base_task import BaseTaskClass, TestItem
 
-TASK_DESCRIPTION = "В каком сегменте памяти хранится {var}?"
+TASK_DESCRIPTION = "Объявите указатель с именем ptr на переменную типа {type}."
 
 VARIANTS = (
-    ("локальная переменная внутри функции", "Stack"),
-    ("динамически выделенная память", "Heap"),
-    ("глобальная переменная с инициализацией", "Data"),
-    ("глобальная переменная без инициализации", "BSS")
+    ("int", "int *ptr"),
+    ("float", "float *ptr"),
+    ("char", "char *ptr")
 )
 
-class Task1(BaseTaskClass):
+class Module3_Submodule2_Task1(BaseTaskClass):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.rng = random.Random(self.seed)
+        #self.rng = random.Random(self.seed)
         self.correct = None
         self.stage = None
         self.student_solution = "" 
 
     def generate_task(self) -> str:
-        self.stage, self.correct = self.rng.choice(VARIANTS)
-        return TASK_DESCRIPTION.format(var=self.stage)
-
-    def compile(self) -> Optional[str]:
-        return None
+        if self.seed % 3 == 0:
+            self.stage, self.correct = VARIANTS[0]
+            return TASK_DESCRIPTION.format(type=self.stage)
+        elif self.seed % 3 == 1:
+            self.stage, self.correct = VARIANTS[1]
+            return TASK_DESCRIPTION.format(type=self.stage)
+        else:
+            self.stage, self.correct = VARIANTS[2]
+            return TASK_DESCRIPTION.format(type=self.stage)
 
     def _generate_tests(self):
         expected = self.correct
