@@ -1,46 +1,41 @@
 # stdlib: qsort
 
 ### Задание №7
-- **Сложность:** средне  
+- **Сложность:** средне
 - **Формулировка:**  
-  Вам дано объявление структуры (соответствует вашему варианту).  
-  Напишите программу, которая:
-  1. Считывает из стандартного ввода `n` объектов указанного типа (каждая строка содержит значения полей в заданном порядке через пробел).
-  2. Сортирует массив объектов по заданному полю с помощью функции `qsort`.
-  3. Выводит отсортированный массив (каждый объект на отдельной строке, поля через пробел).
+  Вам дано объявление структуры и заполненный массив объектов (соответствуют вашему варианту).  
+  Напишите:
+  1. Функцию-компаратор `cmp_<TypeName>` для использования с `qsort`.
+  2. Функцию `sort_arr`, которая принимает массив структур и его длину и сортирует его по заданному полю в заданном направлении с помощью `qsort`.
 
-  Для сравнения элементов используйте функцию сравнения, передаваемую в `qsort`.  
-  Платформа: x86-64, компилятор gcc.
+  Писать `main` не нужно — только компаратор и тело функции `sort_arr`.  
 
 - **Параметры задания:**  
-  Вариант задания определяется значением `seed`.  
-  Параметризуются:
-  - **Тип структуры** (`seed % 5`), порядок полей при вводе и поле для сортировки.
-  - **Количество объектов** `n = 3 + (seed % 2)` (т.е. 3 или 4).
+  Вариант определяется значением `seed`.
+
   - **Направление сортировки** `dir = seed % 2`:
-    - `0` – сортировка по возрастанию
-    - `1` – сортировка по убыванию
+    - `0` — по возрастанию
+    - `1` — по убыванию
 
-  | `seed % 5` | Имя структуры | Поля (порядок ввода) | Поле для сортировки (тип) | Формат вывода |
-  |------------|---------------|----------------------|---------------------------|---------------|
-  | 0 | `Student` | `char name[32]`, `int age`, `float gpa` | `age` (`int`) | `%s %d %.1f` |
-  | 1 | `Book` | `char title[64]`, `int pages`, `double price` | `pages` (`int`) | `%s %d %.2f` |
-  | 2 | `Point2D` | `double x`, `double y`, `int label` | `label` (`int`) | `%.1f %.1f %d` |
-  | 3 | `Rectangle` | `double width`, `double height`, `char color[16]` | `width` (`double`) | `%.1f %.1f %s` |
-  | 4 | `Employee` | `char name[32]`, `int id`, `double salary` | `salary` (`double`) | `%s %d %.2f` |
+  | `seed % 5` | Тип структуры | Объявление структуры | Поле для сортировки (тип) | Сигнатуры функций |
+  |------------|---------------|----------------------|---------------------------|-------------------|
+  | 0 | `Student` | `typedef struct { char name[32]; int age; float gpa; } Student;` | `age` (`int`) | `int cmp_Student(const void*, const void*)`<br>`void sort_arr(Student arr[], int n)` |
+  | 1 | `Book` | `typedef struct { char title[64]; int pages; double price; } Book;` | `pages` (`int`) | `int cmp_Book(const void*, const void*)`<br>`void sort_arr(Book arr[], int n)` |
+  | 2 | `Point2D` | `typedef struct { double x; double y; int label; } Point2D;` | `label` (`int`) | `int cmp_Point2D(const void*, const void*)`<br>`void sort_arr(Point2D arr[], int n)` |
+  | 3 | `Rectangle` | `typedef struct { double width; double height; char color[16]; } Rectangle;` | `width` (`double`) | `int cmp_Rectangle(const void*, const void*)`<br>`void sort_arr(Rectangle arr[], int n)` |
+  | 4 | `Employee` | `typedef struct { char name[32]; int id; double salary; } Employee;` | `salary` (`double`) | `int cmp_Employee(const void*, const void*)`<br>`void sort_arr(Employee arr[], int n)` |
 
+- **Пример для `seed = 7` (`seed % 5 = 2` → `Point2D`, `dir = 1` → убывание по `label`):**
 
-- **Пример (для `seed = 7`, `seed % 5 = 2` → `Point2D`, `n = 3`, `dir = 1` → сортировка по `label` по убыванию):**  
-
-  **Входные данные:**
+  Функция вызвана как `sort_arr(arr, 3)`, где массив содержит:
   ```
-  1.0 2.0 10
-  3.5 4.5 20
-  0.0 1.0 15
+  { .x=1.0, .y=2.0, .label=10 }
+  { .x=3.5, .y=4.5, .label=20 }
+  { .x=0.0, .y=1.0, .label=15 }
   ```
-  **Ожидаемый вывод:**
+  Ожидаемый порядок после сортировки:
   ```
-  3.5 4.5 20
-  0.0 1.0 15
-  1.0 2.0 10
+  { .x=3.5, .y=4.5, .label=20 }
+  { .x=0.0, .y=1.0, .label=15 }
+  { .x=1.0, .y=2.0, .label=10 }
   ```
