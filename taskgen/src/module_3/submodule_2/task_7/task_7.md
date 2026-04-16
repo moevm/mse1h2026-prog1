@@ -1,63 +1,30 @@
-# Тема: Сравнение указателей
+# Тема: Адрес переменной 
 
-### seed % 2 == 0 : 
+**Задача:**
+Чтение переменной через указатель
+Напишите функцию void {func_name}(int *ptr), которая принимает указатель на целое число 
+и выводит значение, находящееся по этому адресу. 
+Если указатель NULL вывести {null_msg}.
+Формат вывода:
+{print_format}
 
-**Условие:**
-Напишите функцию `void equal_ptr(int *a, int *b)`, которая:
-1. Проверяет, указывают ли указатели на один и тот же адрес в памяти
-2. Если адреса разные — сравнивает значения и выводит в формате: `*a <оператор> *b` (где оператор: `<`, `>` или `==`)
-3. Если адреса одинаковые — выводит: `Pointer is equal`
-
-**Формат вывода:**
-- Для разных адресов: `*a <оператор> *b` (например, `5 < 10`)
-- Для одинаковых адресов: `Pointer is equal`
-
-**Пример решения:**
-```c
-#include <stdio.h>
-
-void equal_ptr(int *a, int *b) {
-    if (a == b) {
-        printf("Pointer is equal\n");
-    } else {
-        if (*a < *b) {
-            printf("%d < %d\n", *a, *b);
-        } else if (*a > *b) {
-            printf("%d > %d\n", *a, *b);
-        } else {
-            printf("%d == %d\n", *a, *b);
-        }
-    }
-}
-```
-
-### seed % 2 == 1:
-
-**Условие:**
-Напишите функцию void compare_ptr(int *a, int *b), которая:
-Сравнивает адреса указателей (a и b), а не значения
-Выводит, какой адрес находится «ниже» в памяти:
-a < b если адрес a меньше адреса b
-a > b если адрес a больше адреса b
-a == b если адреса совпадают
-
-**Формат вывода:**
- - a < b
- - a > b
- - a == b
+**Уникальные значения:**
+func_name, print_format, null_msg
+seed % 4 == 0: func_name = "read_ptr_value", print_format = "Value: %d\n", null_msg = "Value: 0\n"
+seed % 4 == 1: func_name = "print_deref", print_format = "Dereferenced: %d\n", null_msg = "NULL pointer\n"
+seed % 4 == 2: func_name = "show_content", print_format = "Content: %d\n", null_msg = "No data\n"
+seed % 4 == 3: func_name = "fetch_from_ptr", print_format = "Ptr value: %d\n", null_msg = "Empty\n"
 
 **Пример решения:**
 ```c
 #include <stdio.h>
 
-void compare_ptr(int *a, int *b) {
-    if (a < b) {
-        printf("a < b\n");
-    } else if (a > b) {
-        printf("a > b\n");
-    } else {
-        printf("a == b\n");
+void fetch_from_ptr(int *ptr) {
+    if (ptr == NULL) {
+        printf("Empty\n");
+        return;
     }
+    printf("Ptr value: %d\n", *ptr);
 }
 ```
 

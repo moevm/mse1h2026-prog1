@@ -1,64 +1,35 @@
-# Тема: "Арифметика указателей"
+### Тема: Адрес переменной 
 
-**Сложность:** средняя
+**Сложность:** легкая
 
-**Задание:**
-Дан массив из 10 элементов типа {type}.
-Требуется увеличить каждый элемент, находящийся на {count} позиции, на {add_value}.
-Используйте только арифметику указателей для доступа к элементам.
-  
-Результат вывести в формате:
-Array after modification: val1, val2, ..., val10
+**Задача:**
+Напишите функцию `void {func_name}({type} *ptr, {type} new_value)`, которая:
+Выведет значение *ptr до изменения. Изменит значение по адресу ptr на new_value. Выведет значение *ptr после изменения
+Формат вывода:
+{print_format}
 
-- Уникальными значениями становятся: `type`, `count`, `add_value`.
+**Уникальными значениями становятся:**
+func_name, type, print_format
 
-seed % 2 == 0: type = int 
+seed % 2 == 0: func_name = change_value; type = float; print_format = Value changed from `old_val` to `new_val`:
 
-seed % 2 == 1: type = float 
-
-seed % 4 == 0: count = "чётной" (0, 2, 4, 6, 8), add_value = 2 
-
-seed % 4 == 1: count = "нечётной" (1, 3, 5, 7, 9), add_value = 1.2 
-
-seed % 4 == 2: count = "кратной трём" (0, 3, 6, 9), add_value = 4
-
-seed % 4 == 3: count = "кратной четырем" (0, 4, 8), add_value = 4.34 
-
-- Ввод: массив задаётся в коде (генерируется автоматически).
-- Пример для seed=15:
-  - type = float (15 % 2 = 1)
-  - count = "кратной четырем" (15 % 4 = 3)
-  - add_value = 4.34
-  
-Исходный массив: [1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0]
-
-Ожидаемый вывод:
-Array after modification: 5.34, 2.0, 3.0, 4.0, 9.34, 6.0, 7.0, 8.0, 13.34, 10.0
+seed % 2 == 1: func_name = transform_number; type = int; print_format = 
+Before: `old_value`
+After: `new_value`
 
 **Пример решения:**
 ```c
 #include <stdio.h>
 
-int main(void) {
-    float arr[10] = {1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0};
-    float *ptr = arr;
-    int i;
-
-    for (i = 0; i < 10; i++) {
-        if (i % 4 == 0) {
-            *(ptr + i) = *(ptr + i) + 4.34; 
-        }
-    }
-    
-    printf("Array after modification: ");
-    for (i = 0; i < 10; i++) {
-        printf("%.2f", *(ptr + i));
-        if (i < 9) {
-            printf(", ");
-        }
-    }
-    printf("\n");
-    
-    return 0;
+void transform_number(int *ptr, int new_value) {
+    printf("Before: %d\n", *ptr);
+    *ptr = new_value;
+    printf("After: %d\n", *ptr);
 }
 ```
+
+ 
+
+
+
+

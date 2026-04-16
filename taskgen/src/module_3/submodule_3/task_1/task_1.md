@@ -1,21 +1,19 @@
 #  Тема: Объявление
- - Сложность: легкая
- - Задание: Объявите массив с именем arr размером 10 элементов типа {type}.
- - Уникальными значениями становятся: type.
 
- seed % 3 == 0: type = int
+**Сложность:** легкая
 
- seed % 3 == 1: type = float
+**Задание:** Объявите массив с именем {name_arr} размером {size} элементов типа {type}.
 
- seed % 3 == 2: type = char
+**Уникальными значениями становятся:** name_arr, type, size
 
- - Ввод: пустой
- 
- - Пример для seed=15:
+ seed % 3 == 0: name_arr = int_arr; type = int; size = (seed % 15 * (seed % 100) + 2)
+ seed % 3 == 1: name_arr = float_arr; type = float; size = (seed % 15 * (seed % 100) + 2)
+ seed % 3 == 2: name_arr = char_arr; type = char; size = (seed % 15 * (seed % 100) + 2)
 
  Ввод: пустой
-
- Ожидаемый вывод: int arr[10]
+ 
+ **Пример для seed=15:**
+ Ожидаемый вывод: int int_arr[2]
 
 
 

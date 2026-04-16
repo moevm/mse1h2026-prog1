@@ -10,10 +10,7 @@
  seed % 3 == 1: type = char
  seed % 3 == 2: type = int
 
- - Ввод: пустой
- - Пример для seed=15:
- Ввод: пустой
- Ожидаемый вывод: float *ptr = &value 
+**Ожидаемый вывод:** float *ptr = &value 
 
 
 
