@@ -18,6 +18,10 @@ from .submodule_2.task_10 import cli_parser as module_2_submodule_2_task_10
 from .submodule_2.task_11 import cli_parser as module_2_submodule_2_task_11
 from .submodule_2.task_12 import cli_parser as module_2_submodule_2_task_12
 
+from .submodule_3.task_1 import cli_parser as module_2_submodule_3_task_1
+from .submodule_3.task_2 import cli_parser as module_2_submodule_3_task_2
+
+
 __all__ = [
     "module_2_submodule_1_task_1",
     "module_2_submodule_1_task_2",
@@ -38,4 +42,7 @@ __all__ = [
     "module_2_submodule_2_task_10",
     "module_2_submodule_2_task_11",
     "module_2_submodule_2_task_12",
+
+    "module_2_submodule_3_task_1",
+    "module_2_submodule_3_task_2",
 ]
