@@ -1,7 +1,8 @@
-from .struct_access_task import StructAccessTask
-from .struct_access_cli import StructAccessCLIParser
+from .struct_compute_task import StructComputeTask
+from .struct_compute_cli import StructComputeCLIParser
+
 
 __all__ = [
-    "StructAccessTask",
-    "StructAccessCLIParser",
+    "StructComputeTask",
+    "StructComputeCLIParser",
 ]
