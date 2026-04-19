@@ -1,4 +1,4 @@
-from .cli import cli_parser
+from .task_2_cli import cli_parser
 from .task_2 import Module2BuildStagesTask2
 
 
