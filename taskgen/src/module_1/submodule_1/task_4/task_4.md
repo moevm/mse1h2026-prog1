@@ -7,7 +7,7 @@
     type function(type1 obj1, type2 obj2, type3 obj3)
     {
         type obj4 = answer;
-        return answer;
+        return obj4;
     }
 ```
 
