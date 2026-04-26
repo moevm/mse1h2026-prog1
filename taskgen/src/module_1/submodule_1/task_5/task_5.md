@@ -8,11 +8,14 @@
 
     int main()
     {
-        printf("text\n");
+        int x = const1;
+        double y = const2;
+        char z = const3;
+        printf(".x=%d, y =%f z= %c\n", x, y, z);
         return 0;
     }
 ```
 
-- Уникальными становятся значения `text`.
+- Уникальными становятся значения `const1`, `const2` и `const3`.
 
-- Ввод: пуст. Пример вывода при `text = I like bananas and figure skating.`: `I like bananas and figure skating.` или `I like bananas and figure skating.\n`.
+- Ввод: пуст. Пример вывода при `const1=13`, `const2=13.13`, `const3='S': `.x=13, y =13.130000 z= S` или `.x=13, y =13.130000 z= S\n`.
