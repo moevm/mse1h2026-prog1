@@ -1,27 +1,35 @@
-### Тема: Разница между массивом и указателем
-
+### Тема: Массивы vs Указатели 
 **Сложность:** средняя
 
 **Задание:**
-Напишите функцию `void {func_name}(int *arr, int size)`, которая обходит массив с помощью указателя и выводит каждый элемент. Имя массива является неизменяемым адресом (`arr++` недопустимо), поэтому для обхода создайте вспомогательный указатель `int *p = arr` или используйте арифметику `*(arr + i)`. Запрещено использовать синтаксис `arr[i]`. 
-Формат вывода:
-{print_format}
+Реализуйте функцию `void {func_name}(int size)`, которая объявляет массив целых чисел `int arr[size]` и инициализирует его элементы по формуле: `arr[i] = {init_formula}`. Выведите все элементы массива, используя два способа доступа: через индекс `arr[i]` и через арифметику указателей.
 
-**Уникальными значениями становятся:** `func_name`, `print_format`
-`seed % 2 == 0`: func_name = "traverse_with_ptr", print_format = "Element: %d\n"
-`seed % 2 == 1`: func_name = "print_via_pointer", print_format = "Val: %d\n"
+**Формат вывода:** `{print_format}`
 
-**Пример:** (для seed=15 генерируются `func_name` = "print_via_pointer", `print_format` = "Val: %d\n")
+**Уникальными значениями становятся:** `func_name`, `init_formula`, `print_format`
+`seed % 4 == 0`: func_name = "print_dual_arr", init_formula = "i * 2 + 1", print_format = "Idx[%d]: %d | Ptr: %d\n"
+`seed % 4 == 1`: func_name = "show_idx_vs_ptr", init_formula = "i * i", print_format = "El[%d]: %d | Ptr: %d\n"
+`seed % 4 == 2`: func_name = "array_dual_output", init_formula = "100 - i * 3", print_format = "Arr[%d]: %d | Ptr: %d\n"
+`seed % 4 == 3`: func_name = "demo_access_modes", init_formula = "i + 10", print_format = "Out[%d]: %d | Ptr: %d\n"
+
+**Ввод:** Размер массива `size` передаётся в функцию как аргумент из `main()`.
+
+**Пример:** (для seed=15 генерируются `func_name` = "demo_access_modes", `init_formula` = "i + 10", `print_format` = "Out[%d]: %d | Ptr: %d\n")
 
 **Пример решения:**
 ```c
 #include <stdio.h>
 
-void print_via_pointer(int *arr, int size) {
-    int *p = arr;
+void demo_access_modes(int size) {
+    int arr[size];
+
     for (int i = 0; i < size; i++) {
-        printf("Val: %d\n", *p);
-        p++;
+        arr[i] = i + 10;
+    }
+
+    for (int i = 0; i < size; i++) {
+        printf("Out[%d]: %d | Ptr: %d\n", i, arr[i], *(arr + i));
     }
 }
-```
+
+Проверка осуществляется следующим образом: предпроверка - regex: использование арифметики указателей(разрешено: *(arr + i), *ptr++ и т.п.), сравнение строки вывода(обращение к элементу через arr[i] и через указатель); После компиляция и тесты с передачей в функцию разных размеров size;
