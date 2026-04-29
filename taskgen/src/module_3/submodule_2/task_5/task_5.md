@@ -1,52 +1,46 @@
-# Тема: Адрес переменной 
+### Тема: Разыменовывание
 
-### seed % 2 == 0 : 
-**Условие:**
-Напишите функцию `void solution(int *ptr, int new_value)`, которая:
-1. Выведет значение *ptr до изменения
-2. Изменит значение по адресу ptr на new_value
-3. Выведет значение *ptr после изменения
+# Сложность: легкая
 
-**Формат вывода:**
-Before: X
-After: Y
+# Задание:
+ Напишите функцию `{func_name}({type} *{p1}, {type} *{p2}, {type} *{p3})`, которая разыменовывает указатели `{p1}` и `{p2}`, вычисляет сумму значений и записывает результат по адресу `{p3}`. Внутри функции выведите полученное значение в формате `{fmt_str}`.
 
-**Пример решения:**
+ - Уникальными значениями становятся:
+`func_name`, `p1`, `p2`, `p3`, `fmt_str`
+
+Правила генерации параметров (по seed):
+seed % 3 == 0: func_name = "sum_via_ptrs", p1 = "a", p2 = "b", p3 = "res"
+seed % 3 == 1: func_name = "add_pointed_vals", p1 = "lhs", p2 = "rhs", p3 = "out"
+seed % 3 == 2: func_name = "compute_sum_ref", p1 = "val_x", p2 = "val_y", p3 = "target"
+seed % 4 == 0: fmt_str = "Calculated: %d\n"
+seed % 4 == 1: fmt_str = "Результат => %d\n"
+seed % 4 == 2: fmt_str = "[Output] %d\n"
+seed % 4 == 3: fmt_str = "Final value -> %d\n"
+
+ - Ввод: Значения инициализируются в `main`, в функцию передаются их адреса (например, 10 и 7).
+# Пример: 
+ для seed=15 генерируются: func_name = "compute_sum_ref", p1 = "val_x", p2 = "val_y", p3 = "target", fmt_str = "Final value -> %d\n"
+ 
+ - Ввод: *val_x = 10, *val_y = 7
+
+ - Вывод:
+  Final value -> 17
+
+ - Пример решения:
 ```c
 #include <stdio.h>
 
-void solution(int *ptr, int new_value) {
-    printf("Before: %d\n", *ptr);
-    *ptr = new_value;
-    printf("After: %d\n", *ptr);
+void compute_sum_ref(int *val_x, int *val_y, int *target) {
+    *target = *val_x + *val_y;
+    printf("Final value -> %d\n", *target);
+}
+
+int main(void) {
+    int x = 10;
+    int y = 7;
+    int res = 0;
+    
+    compute_sum_ref(&x, &y, &res);
+    return 0;
 }
 ```
-
-### seed % 2 == 1: 
-
-**Условие:**
-Чтение переменной через указатель
-
-Напишите функцию void print_value(int *ptr), которая принимает указатель на целое число 
-и выводит значение, находящееся по этому адресу. 
-Если указатель NULL вывести Value: 0
-
-**Формат вывода:**
-Value: X
-
-**Пример решения:**
-```c
-#include <stdio.h>
-
-void print_value(int *ptr) {
-    if (ptr == NULL){
-        printf("Value: 0\n");
-    }
-    else{
-    printf("Value: %d\n", *ptr);
-    }
-}
-```
-
-
-
