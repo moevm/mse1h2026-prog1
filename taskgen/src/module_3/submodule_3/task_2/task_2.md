@@ -1,9 +1,10 @@
-# Тема: "Инициализация через указатель"
+### Тема: "Инициализация через указатель"
+
 **Сложность:** средняя
 
-## Задание:
+**Задание:**
 Объявите массив `arr` размером `{size}` элементов типа `{type}`.
-Объявите указатель `{pointer_type} *ptr` на начало массива.
+Объявите указатель `{type} *ptr` на начало массива.
 Заполните массив в цикле по формуле: `{formula}`.
 Используйте доступ к элементам массива через указатель.
 Выведите значение элемента по индексу `{output_index}`.
@@ -11,25 +12,15 @@
 **Формат вывода:**
 `Value: X`
 
-## Уникальными значениями становятся: `type`, `size`, `formula`, `output_index`
+**Уникальными значениями становятся:**
+`size`, `type`, `formula`, `output_index`
 
-seed % 3 == 0: type = int, pointer_type = int 
-seed % 3 == 1: type = float, pointer_type = float 
-seed % 3 == 2: type = char, pointer_type = char 
+seed % 2 == 0: size = (seed % 15); type = int; formula = i * (seed % 1000);output_index = (seed % 15)
 
-seed % 4 == 0: formula = "i + 3", output_index = 5 
-seed % 4 == 1: formula = "i * 2", output_index = 3 
-seed % 4 == 2: formula = "i - 1", output_index = 7 
-seed % 4 == 3: formula = "i + 10", output_index = 2 
-
-seed % 5 == 0: size = 10 
-seed % 5 == 1: size = 15 
-seed % 5 == 2: size = 20 
-seed % 5 == 3: size = 12 
-seed % 5 == 4: size = 8 
+seed % 2 == 1: size=(seed % 15); type=float; formula=((seed % 1000) * 0.5) + i; output_index=(seed % 15)
 
 ## Ввод:
-Массив задаётся в коде (генерируется автоматически). Ввод пустой.
+Массив задаётся в коде.
 
 ## Пример для seed=15:
 type 15 % 3 = 0 `int` 

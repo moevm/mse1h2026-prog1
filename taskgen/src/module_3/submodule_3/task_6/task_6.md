@@ -1,78 +1,36 @@
-# Тема: "Многомерные массивы"
-**Сложность:** сложная
-## Варианты задач (определяются по seed)
+### Тема: Многомерные массивы
 
-### seed % 2 == 0 : Задача 3.6.1
-**Название:** День года по дате
+**Сложность:** средняя
+**Задание:**
+Реализуйте функцию `[func_name](int matrix[][COLS], int rows, int target)`, которая принимает двумерный массив фиксированной ширины равной 4, количество строк `rows` и индекс `target`. Функция должна {operation}. 
+Формат вывода:
+{print_format}
 
-**Условие:**
-Напишите функцию `int day_of_year(int year, int month, int day)`, которая:
-1. Использует двумерный массив `daytab[2][13]` для хранения дней в месяцах
-2. Определяет, високосный ли год (`leap = year%4 == 0 && year%100 != 0 || year%400 == 0`)
-3. Преобразует дату (месяц + день) в день года (1–365/366)
+**Уникальными значениями становятся:**
+`func_name`, `operation`, `print_format`
+`seed % 4 == 0`: func_name = "calc_row_sum", operation = "вычислить сумму target строки", print_format = "Sum row %d: %d\n"
+`seed % 4 == 1`: func_name = "find_col_max", operation = "найти максимальный элемент в target столбце", print_format = "Max col %d: %d\n"
+`seed % 4 == 2`: func_name = "calc_col_sum", operation = "вычислить сумму target столбца", print_format = "Sum col %d: %d\n"
+`seed % 4 == 3`: func_name = "find_row_min", operation = "найти минимальный элемент в target строке", print_format = "Min row %d: %d\n"
 
-**Формат вывода:**
-`Day of year: X`
+Ввод: Массив инициализируется в `main()` явно. Параметры `rows` и `target` передаются в функцию. 
 
-**Пример решения (day_of_year.c):**
+**Пример:** (для seed=13 генерируются `func_name` = "find_col_max", `target` = 2, `print_format` = "Max col %d: %d\n")
+
+**Пример решения:**
 ```c
 #include <stdio.h>
+#define COLS 4
 
-static char daytab[2][13] = {
-    {0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31},
-    {0, 31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31}
-};
-
-void day_of_year(int year, int month, int day) {
-    int i, leap;
-    leap = year % 4 == 0 && year % 100 != 0 || year % 400 == 0;
-    for (i = 1; i < month; i++) {
-        day += daytab[leap][i];
+void find_col_max(int matrix[][COLS], int rows, int target) {
+    if (target < 0 || target >= COLS) return;
+    
+    int max_val = matrix[0][target];
+    for (int i = 1; i < rows; i++) {
+        if (matrix[i][target] > max_val) {
+            max_val = matrix[i][target];
+        }
     }
-    printf("Day of year: %d\n", day);
-}
-
-int main() {
-    day_of_year(2024, 3, 1);
-    return 0;
-}
-```
-
-### seed % 2 == 1: Задача 3.6.2
-
-**Условие:**
-Напишите функцию `void month_day(int year, int yearday, int *pmonth, int *pday)`, которая:
-1. Использует двумерный массив `daytab[2][13]` для хранения дней в месяцах
-2.  Определяет, високосный ли год (`leap = year%4 == 0 && year%100 != 0 || year%400 == 0`)
-3. Преобразует день года (1–365/366) в дату (месяц + день)
-4. Записывает результат через указатели `*pmonth` и `*pday`
-
-**Формат вывода:**
-`Month: M, Day: D`
-
-**Пример решения (month_day.c):**
-```c
-#include <stdio.h>
-
-static char daytab[2][13] = {
-    {0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31},
-    {0, 31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31}
-};
-
-void month_day(int year, int yearday, int *pmonth, int *pday) {
-    int i, leap;
-    leap = year % 4 == 0 && year % 100 != 0 || year % 400 == 0;
-    for (i = 1; yearday > daytab[leap][i]; i++) {
-        yearday -= daytab[leap][i];
-    }
-    *pmonth = i;
-    *pday = yearday;
-    printf("Month: %d, Day: %d\n", m, d);
-}
-
-int main() {
-    int m, d;
-    month_day(2024, 60, &m, &d);
-    return 0;
+    printf("Max col %d: %d\n", target, max_val);
 }
 ```
