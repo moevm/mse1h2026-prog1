@@ -4,33 +4,41 @@ import re
 from src.base_module.base_task import BaseTaskClass, TestItem
 
 
-class Module3_Submodule2_Task1(BaseTaskClass):
+class Module3_Submodule3_Task1(BaseTaskClass):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.rng = random.Random(self.seed)
-        self.expected = None
+        self.correct = None
         self.student_solution = "" 
 
     def generate_task(self) -> str:
         rem = self.seed % 3
-        types = ["int", "float", "char"]
-        self.type = types[rem]
-        self.expected = f"{self.type} *ptr"
-        return f"""### Тема: Память и модель памяти
+        if rem == 0:
+            type_str, name_arr = "int", "int_arr"
+        elif rem == 1:
+            type_str, name_arr = "float", "float_arr"
+        else:
+            type_str, name_arr = "char", "char_arr"
+            
+        size = (self.seed % 15) * (self.seed % 100) + 2
+        self.correct = f"{type_str} {name_arr}[{size}]"
+        
+        return f"""###  Тема: Объявление
 
 **Сложность:** легкая
 
-**Задача:** Объявите указатель на {self.type}."""
+**Задание:** Объявите массив с именем {name_arr} размером {size} элементов типа {type_str}."""
 
     def compile(self) -> Optional[str]:
         return None  
 
     def _generate_tests(self):
+        expected = self.correct
         self.tests = [
             TestItem(
                 input_str="",
                 showed_input="",
-                expected=self.expected,
+                expected=expected,
                 compare_func=lambda output, exp: self._compare_decl(output, exp)
             )
         ]
@@ -55,7 +63,7 @@ class Module3_Submodule2_Task1(BaseTaskClass):
         try:
             self.generate_task()
             
-            if self._compare_decl(self.student_solution, self.expected):
+            if self._compare_decl(self.student_solution, self.correct):
                 return True, "OK: Верное объявление."
             else:
                 return False, "FAIL: Ответ неверный."

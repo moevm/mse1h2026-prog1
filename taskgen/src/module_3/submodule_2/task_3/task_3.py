@@ -1,31 +1,25 @@
 from typing import Optional
 import random
+import re
 from src.base_module.base_task import BaseTaskClass, TestItem
 
-TASK_DESCRIPTION = """### Тема: Память и модель памяти
-
+TASK_DESCRIPTION = """### Тема: Проверка указателя на NULL
 **Сложность:** легкая
 
-**Задача:** В каком сегменте памяти хранится {var}?"""
+**Задание:**
+Напишите корректное условие для проверки указателя `ptr` на значение `NULL`. Ответ должен содержать оператор `if` и сравнение.
+"""
 
-VARIANTS = (
-    ("локальная переменная внутри функции", "Stack"),
-    ("динамически выделенная память", "Heap"),
-    ("глобальная переменная с инициализацией", "Data"),
-    ("глобальная переменная без инициализации", "BSS")
-)
-
-class Module3_Submodule1_Task1(BaseTaskClass):
+class Module3_Submodule2_Task3(BaseTaskClass):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.rng = random.Random(self.seed)
         self.correct = None
-        self.stage = None
         self.student_solution = "" 
 
     def generate_task(self) -> str:
-        self.stage, self.correct = self.rng.choice(VARIANTS)
-        return TASK_DESCRIPTION.format(var=self.stage)
+        self.correct = "if (ptr == NULL)"
+        return TASK_DESCRIPTION
 
     def compile(self) -> Optional[str]:
         return None
@@ -37,9 +31,19 @@ class Module3_Submodule1_Task1(BaseTaskClass):
                 input_str="",
                 showed_input="",
                 expected=expected,
-                compare_func=lambda output, exp: self._compare_default(output.strip(), exp)
+                compare_func=lambda output, exp: self._compare_default(output, exp)
             )
         ]
+
+    def _compare_default(self, output: str, expected: str) -> bool:
+        clean = re.sub(r'\s+', '', output.strip().rstrip(';').lower())
+        valid_variants = {
+            "if(ptr==null)",
+            "if(ptr==0)",
+            "if(!ptr)",
+            "if(0==ptr)"
+        }
+        return clean in valid_variants
 
     def run_solution(self, test: TestItem):
         student_answer = self.student_solution.strip() 
@@ -56,9 +60,9 @@ class Module3_Submodule1_Task1(BaseTaskClass):
         try:
             self.generate_task()
             
-            if self.student_solution.strip().lower() == self.correct.lower():
+            if self._compare_default(self.student_solution, self.correct):
                 return True, "OK: Верный ответ."
             else:
-                return False, "FAIL: FAIL: Ответ неверный."
+                return False, "FAIL: Ответ неверный."
         except Exception as e:
             return False, f"FAIL: {str(e)}"

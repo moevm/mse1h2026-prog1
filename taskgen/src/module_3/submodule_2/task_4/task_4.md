@@ -39,12 +39,6 @@ void make_absolute(int *ptr) {
     }
     printf("Absolute value: %d\n", *ptr);
 }
-
-int main(void) {
-    int x = -12;
-    make_absolute(&x);
-    return 0;
-}
 ```
   
 

@@ -6,16 +6,9 @@ TASK_DESCRIPTION = """### Тема: Память и модель памяти
 
 **Сложность:** легкая
 
-**Задача:** В каком сегменте памяти хранится {var}?"""
+**Задача:** Сколько времени живёт статическая переменная?"""
 
-VARIANTS = (
-    ("локальная переменная внутри функции", "Stack"),
-    ("динамически выделенная память", "Heap"),
-    ("глобальная переменная с инициализацией", "Data"),
-    ("глобальная переменная без инициализации", "BSS")
-)
-
-class Module3_Submodule1_Task1(BaseTaskClass):
+class Module3_Submodule1_Task3(BaseTaskClass):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.rng = random.Random(self.seed)
@@ -24,8 +17,8 @@ class Module3_Submodule1_Task1(BaseTaskClass):
         self.student_solution = "" 
 
     def generate_task(self) -> str:
-        self.stage, self.correct = self.rng.choice(VARIANTS)
-        return TASK_DESCRIPTION.format(var=self.stage)
+        self.correct = "всю программу"
+        return TASK_DESCRIPTION
 
     def compile(self) -> Optional[str]:
         return None
@@ -56,9 +49,10 @@ class Module3_Submodule1_Task1(BaseTaskClass):
         try:
             self.generate_task()
             
-            if self.student_solution.strip().lower() == self.correct.lower():
+            allowed = ["всю программу", "всю работу программы", "время выполнения программы"]
+            if self.student_solution.strip().lower() in allowed:
                 return True, "OK: Верный ответ."
             else:
-                return False, "FAIL: FAIL: Ответ неверный."
+                return False, "FAIL: Ответ неверный."
         except Exception as e:
             return False, f"FAIL: {str(e)}"

@@ -16,12 +16,12 @@ Element size: Z
 
 **Пример:** (для seed=15 генерируются `func_name` = "show_sizes_float", `type` = "float", `size` = 15)
 
-**Пример решения:**f
+**Пример решения:**
 ```c
 #include <stdio.h>
 
 void show_sizes_float(int size) {
-    float arr[15];
+    float arr[size];
     float *ptr = arr;
     
     printf("Array size: %zu\n", sizeof(arr));

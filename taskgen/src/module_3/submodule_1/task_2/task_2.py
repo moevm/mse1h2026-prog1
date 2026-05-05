@@ -6,16 +6,9 @@ TASK_DESCRIPTION = """### Тема: Память и модель памяти
 
 **Сложность:** легкая
 
-**Задача:** В каком сегменте памяти хранится {var}?"""
+**Задача:** Каким ключевым отличием сегмент Data отличается от BSS?"""
 
-VARIANTS = (
-    ("локальная переменная внутри функции", "Stack"),
-    ("динамически выделенная память", "Heap"),
-    ("глобальная переменная с инициализацией", "Data"),
-    ("глобальная переменная без инициализации", "BSS")
-)
-
-class Module3_Submodule1_Task1(BaseTaskClass):
+class Module3_Submodule1_Task2(BaseTaskClass):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.rng = random.Random(self.seed)
@@ -24,22 +17,26 @@ class Module3_Submodule1_Task1(BaseTaskClass):
         self.student_solution = "" 
 
     def generate_task(self) -> str:
-        self.stage, self.correct = self.rng.choice(VARIANTS)
-        return TASK_DESCRIPTION.format(var=self.stage)
+        self.correct = ["инициализац", "инициализирован", "init", "значени"]
+        return TASK_DESCRIPTION
 
     def compile(self) -> Optional[str]:
         return None
 
     def _generate_tests(self):
-        expected = self.correct
+        expected = ""
         self.tests = [
             TestItem(
                 input_str="",
                 showed_input="",
                 expected=expected,
-                compare_func=lambda output, exp: self._compare_default(output.strip(), exp)
+                compare_func=lambda output, exp: self._compare_default(output, exp)
             )
         ]
+
+    def _compare_default(self, output: str, expected: str) -> bool:
+        text = output.lower()
+        return any(kw in text for kw in self.correct)
 
     def run_solution(self, test: TestItem):
         student_answer = self.student_solution.strip() 
@@ -56,9 +53,9 @@ class Module3_Submodule1_Task1(BaseTaskClass):
         try:
             self.generate_task()
             
-            if self.student_solution.strip().lower() == self.correct.lower():
+            if self._compare_default(self.student_solution, ""):
                 return True, "OK: Верный ответ."
             else:
-                return False, "FAIL: FAIL: Ответ неверный."
+                return False, "FAIL: Ответ неверный."
         except Exception as e:
             return False, f"FAIL: {str(e)}"
