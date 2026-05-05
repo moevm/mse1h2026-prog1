@@ -1,44 +1,44 @@
 from typing import Optional
 import random
+import re
 from src.base_module.base_task import BaseTaskClass, TestItem
 
-TASK_DESCRIPTION = "Объявите указатель с именем ptr на переменную типа {type}."
-
-VARIANTS = (
-    ("int", "int *ptr"),
-    ("float", "float *ptr"),
-    ("char", "char *ptr")
-)
 
 class Module3_Submodule2_Task1(BaseTaskClass):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        #self.rng = random.Random(self.seed)
-        self.correct = None
-        self.stage = None
+        self.rng = random.Random(self.seed)
+        self.expected = None
         self.student_solution = "" 
 
     def generate_task(self) -> str:
-        if self.seed % 3 == 0:
-            self.stage, self.correct = VARIANTS[0]
-            return TASK_DESCRIPTION.format(type=self.stage)
-        elif self.seed % 3 == 1:
-            self.stage, self.correct = VARIANTS[1]
-            return TASK_DESCRIPTION.format(type=self.stage)
-        else:
-            self.stage, self.correct = VARIANTS[2]
-            return TASK_DESCRIPTION.format(type=self.stage)
+        rem = self.seed % 3
+        types = ["int", "float", "char"]
+        self.type = types[rem]
+        self.expected = f"{self.type} *ptr"
+        return f"""### Тема: Память и модель памяти
+
+**Сложность:** легкая
+
+**Задача:** Объявите указатель на {self.type}."""
+
+    def compile(self) -> Optional[str]:
+        return None  
 
     def _generate_tests(self):
-        expected = self.correct
         self.tests = [
             TestItem(
                 input_str="",
                 showed_input="",
-                expected=expected,
-                compare_func=lambda output, exp: self._compare_default(output.strip(), exp)
+                expected=self.expected,
+                compare_func=lambda output, exp: self._compare_decl(output, exp)
             )
         ]
+
+    def _compare_decl(self, output: str, expected: str) -> bool:
+        clean_out = re.sub(r'\s+', ' ', output.strip().rstrip(';').lower())
+        clean_exp = re.sub(r'\s+', ' ', expected.strip().rstrip(';').lower())
+        return clean_out == clean_exp
 
     def run_solution(self, test: TestItem):
         student_answer = self.student_solution.strip() 
@@ -55,9 +55,9 @@ class Module3_Submodule2_Task1(BaseTaskClass):
         try:
             self.generate_task()
             
-            if self.student_solution.strip().lower() == self.correct.lower():
-                return True, "OK: Верный ответ."
+            if self._compare_decl(self.student_solution, self.expected):
+                return True, "OK: Верное объявление."
             else:
-                return False, f"FAIL: Ожидалось {self.correct}, получено {self.student_solution}"
+                return False, "FAIL: Ответ неверный."
         except Exception as e:
             return False, f"FAIL: {str(e)}"

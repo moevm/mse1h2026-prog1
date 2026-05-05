@@ -31,7 +31,7 @@ void process_calloc_array(int size) {
     }
 
     for (int i = 0; i < size; i++) {
-        arr[i] = i * 1.5f;
+        arr[i] = (15 + i) * 1.5f;
     }
 
     printf("Array: ");

@@ -1,6 +1,6 @@
 import argparse
 from src.base_module.base_cli import CLIParser, add_common_cli_args, get_common_cli_args
-from .task_5 import Module3_Submodule2_Task5  
+from .task_5 import Module3_Submodule2_Task5
 
 def create_task_1(args) -> Module3_Submodule2_Task5:
     task = Module3_Submodule2_Task5(

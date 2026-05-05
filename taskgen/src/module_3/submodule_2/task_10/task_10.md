@@ -13,6 +13,7 @@
 **Пример:** (для seed=15 генерируются func_name = "exchange_ptr_targets", swap_output = "Swapped => a:`**a` b:`**b`")
 
 **Пример решения:**
+```c
 #include <stdio.h>
 
 void exchange_ptr_targets(int **a, int **b) {
@@ -21,3 +22,4 @@ void exchange_ptr_targets(int **a, int **b) {
     *b = temp;
     printf("Swapped => a:%d b:%d\n", **a, **b);
 }
+```

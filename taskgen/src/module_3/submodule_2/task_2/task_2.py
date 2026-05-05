@@ -2,7 +2,11 @@ from typing import Optional
 import random
 from src.base_module.base_task import BaseTaskClass, TestItem
 
-TASK_DESCRIPTION = "Объявите указатель с именем ptr на переменную типа {type}."
+TASK_DESCRIPTION = """### Тема: Память и модель памяти
+
+**Сложность:** легкая
+
+**Задача:** Объявите указатель с именем ptr на переменную типа {type}."""
 
 VARIANTS = (
     ("int", "int *ptr = &value"),
@@ -13,7 +17,6 @@ VARIANTS = (
 class Module3_Submodule2_Task2(BaseTaskClass):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        #self.rng = random.Random(self.seed)
         self.correct = None
         self.stage = None
         self.student_solution = "" 
@@ -58,6 +61,6 @@ class Module3_Submodule2_Task2(BaseTaskClass):
             if self.student_solution.strip().lower() == self.correct.lower():
                 return True, "OK: Верный ответ."
             else:
-                return False, f"FAIL: Ожидалось {self.correct}, получено {self.student_solution}"
+                return False, "FAIL: Ответ неверный."
         except Exception as e:
             return False, f"FAIL: {str(e)}"

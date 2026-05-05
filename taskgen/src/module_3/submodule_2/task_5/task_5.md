@@ -34,13 +34,4 @@ void compute_sum_ref(int *val_x, int *val_y, int *target) {
     *target = *val_x + *val_y;
     printf("Final value -> %d\n", *target);
 }
-
-int main(void) {
-    int x = 10;
-    int y = 7;
-    int res = 0;
-    
-    compute_sum_ref(&x, &y, &res);
-    return 0;
-}
 ```

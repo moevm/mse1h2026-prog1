@@ -2,7 +2,11 @@ from typing import Optional
 import random
 from src.base_module.base_task import BaseTaskClass, TestItem
 
-TASK_DESCRIPTION = "В каком сегменте памяти хранится {var}?"
+TASK_DESCRIPTION = """### Тема: Память и модель памяти
+
+**Сложность:** легкая
+
+**Задача:** В каком сегменте памяти хранится {var}?"""
 
 VARIANTS = (
     ("локальная переменная внутри функции", "Stack"),
@@ -55,6 +59,6 @@ class Module3_Submodule1_Task1(BaseTaskClass):
             if self.student_solution.strip().lower() == self.correct.lower():
                 return True, "OK: Верный ответ."
             else:
-                return False, f"FAIL: FAIL: Ответ неверный."
+                return False, "FAIL: FAIL: Ответ неверный."
         except Exception as e:
             return False, f"FAIL: {str(e)}"

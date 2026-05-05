@@ -26,3 +26,4 @@ void ptr_sum_elements(int *arr, int size) {
     printf("Total sum: %d\n", sum);
 }
 ```
+Проверка осуществляется через regex(арифметика указателей) и тесты
