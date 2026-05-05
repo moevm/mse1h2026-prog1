@@ -1,0 +1,87 @@
+from typing import Optional
+import random
+from src.base_module.base_task import BaseTaskClass, TestItem, DEFAULT_TEST_NUM
+
+
+class Module3_Submodule5_Task1(BaseTaskClass):
+    def __init__(self, **kwargs):
+        default_params = {"tests_num": DEFAULT_TEST_NUM}
+        default_params.update(kwargs)
+        super().__init__(**default_params)
+        self.check_files = {"test_driver.c": self._get_test_driver_code()}
+
+    def _get_test_driver_code(self) -> str:
+        return '''#include <stdio.h>
+#include <stdlib.h>
+
+void alloc_and_print(int size);
+
+int main() {
+    int size;
+    if (scanf("%d", &size) != 1) return 1;
+    alloc_and_print(size);
+    return 0;
+}
+'''
+
+    def generate_task(self) -> str:
+        type_str = "int" if self.seed % 2 == 0 else "float"
+        value = self.seed if self.seed % 2 == 0 else self.seed / 2.0
+        return f"""### Тема: "Функция malloc()"
+**Сложность:** средняя
+
+**Задание:**
+ Реализуйте функцию `alloc_and_print(int size)`, которая внутри себя выделяет память с помощью `malloc` для массива из `size` элементов типа `{type_str}`. Инициализируйте массив значениями по формуле: `arr[i] = {value} * i`. Выведите все элементы массива в формате `Array: val1, val2, ..., valN`. Освободите выделенную память с помощью `free()`. Проверка результата `malloc` на `NULL` обязательна: если выделение памяти оказалось неудачным, выведите `Allocation failed` в `stderr` и завершите работу функции.
+"""
+
+    def _generate_tests(self):
+        random.seed(self.seed)
+        self.tests = []
+        type_str = "int" if self.seed % 2 == 0 else "float"
+        value = self.seed if self.seed % 2 == 0 else self.seed / 2.0
+
+        base_sizes = [1, 3, 5, 10, 15]
+        for _ in range(self.tests_num - len(base_sizes)):
+            base_sizes.append(random.randint(2, 20))
+
+        for size in base_sizes:
+            input_str = str(size)
+            if size <= 0:
+                expected = ""
+            else:
+                vals = [value * i for i in range(size)]
+                if type_str == "int":
+                    formatted_vals = [str(int(v)) for v in vals]
+                else:
+                    formatted_vals = [f"{v:g}" for v in vals]
+                expected = "Array: " + ", ".join(formatted_vals) + "\n"
+
+            self.tests.append(TestItem(
+                input_str=input_str,
+                showed_input=f"size={size}",
+                expected=expected,
+                compare_func=self._compare_default
+            ))
+
+    def check_sol_prereq(self) -> Optional[str]:
+        err = super().check_sol_prereq()
+        if err:
+            return err
+
+        if "alloc_and_print(int size)" not in self.solution:
+            return "Ошибка: функция alloc_and_print имеет неверную сигнатуру или отсутствует."
+        if "malloc" not in self.solution:
+            return "Ошибка: не найдено использование malloc."
+        if "free" not in self.solution:
+            return "Ошибка: не найдено использование free."
+        if "NULL" not in self.solution and "nullptr" not in self.solution:
+            return "Ошибка: не найдена проверка результата malloc на NULL."
+
+        return None
+
+    def _compare_default(self, output: str, expected: str) -> bool:
+        def normalize(s: str) -> str:
+            s = s.replace('\r\n', '\n').replace('\r', '\n')
+            lines = [line.rstrip() for line in s.split('\n')]
+            return '\n'.join(lines).strip()
+        return normalize(output) == normalize(expected)

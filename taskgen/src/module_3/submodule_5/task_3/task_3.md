@@ -29,7 +29,7 @@ void realloc_float(int initial_size, int new_size) {
     }
 
     for (int i = 0; i < initial_size; i++) {
-        arr[i] = i * 1.5f;
+        arr[i] = (15 + i) * 1.5f;
     }
 
     float *tmp = realloc(arr, new_size * sizeof(float));
@@ -41,7 +41,7 @@ void realloc_float(int initial_size, int new_size) {
     arr = tmp;
 
     for (int i = initial_size; i < new_size; i++) {
-        arr[i] = i + 10.0f;
+        arr[i] = (15 + i) + 10.0f;
     }
 
     printf("Array: ");
