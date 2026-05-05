@@ -20,6 +20,31 @@ from .submodule_2.task_12 import cli_parser as module_2_submodule_2_task_12
 
 from .submodule_3.task_1 import cli_parser as module_2_submodule_3_task_1
 from .submodule_3.task_2 import cli_parser as module_2_submodule_3_task_2
+from .submodule_3.task_3 import cli_parser as module_2_submodule_3_task_3
+from .submodule_3.task_4 import cli_parser as module_2_submodule_3_task_4
+from .submodule_3.task_5 import cli_parser as module_2_submodule_3_task_5
+from .submodule_3.task_6 import cli_parser as module_2_submodule_3_task_6
+
+from .submodule_4.task_1 import cli_parser as module_2_submodule_4_task_1
+from .submodule_4.task_2 import cli_parser as module_2_submodule_4_task_2
+from .submodule_4.task_3 import cli_parser as module_2_submodule_4_task_3
+from .submodule_4.task_4 import cli_parser as module_2_submodule_4_task_4
+from .submodule_4.task_5 import cli_parser as module_2_submodule_4_task_5
+from .submodule_4.task_6 import cli_parser as module_2_submodule_4_task_6
+
+from .submodule_5.task_1 import cli_parser as module_2_submodule_5_task_1
+from .submodule_5.task_2 import cli_parser as module_2_submodule_5_task_2
+from .submodule_5.task_3 import cli_parser as module_2_submodule_5_task_3
+from .submodule_5.task_4 import cli_parser as module_2_submodule_5_task_4
+from .submodule_5.task_5 import cli_parser as module_2_submodule_5_task_5
+
+from .submodule_6.task_1 import cli_parser as module_2_submodule_6_task_1
+from .submodule_6.task_2 import cli_parser as module_2_submodule_6_task_2
+from .submodule_6.task_3 import cli_parser as module_2_submodule_6_task_3
+from .submodule_6.task_4 import cli_parser as module_2_submodule_6_task_4
+from .submodule_6.task_5 import cli_parser as module_2_submodule_6_task_5
+from .submodule_6.task_6 import cli_parser as module_2_submodule_6_task_6
+from .submodule_6.task_7 import cli_parser as module_2_submodule_6_task_7
 
 
 __all__ = [
@@ -45,4 +70,29 @@ __all__ = [
 
     "module_2_submodule_3_task_1",
     "module_2_submodule_3_task_2",
+    "module_2_submodule_3_task_3",
+    "module_2_submodule_3_task_4",
+    "module_2_submodule_3_task_5",
+    "module_2_submodule_3_task_6",
+
+    "module_2_submodule_4_task_1",
+    "module_2_submodule_4_task_2",
+    "module_2_submodule_4_task_3",
+    "module_2_submodule_4_task_4",
+    "module_2_submodule_4_task_5",
+    "module_2_submodule_4_task_6",
+
+    "module_2_submodule_5_task_1",
+    "module_2_submodule_5_task_2",
+    "module_2_submodule_5_task_3",
+    "module_2_submodule_5_task_4",
+    "module_2_submodule_5_task_5",
+
+    "module_2_submodule_6_task_1",
+    "module_2_submodule_6_task_2",
+    "module_2_submodule_6_task_3",
+    "module_2_submodule_6_task_4",
+    "module_2_submodule_6_task_5",
+    "module_2_submodule_6_task_6",
+    "module_2_submodule_6_task_7",
 ]
