@@ -4,6 +4,10 @@ from src.base_module.base_cli import CLIParser, get_common_cli_args
 from .task_1 import Module_1_Submodule_8_task_1
 
 
+def _factory(args):
+    return Module_1_Submodule_8_task_1(seed=args.seed)
+
+
 
 def _add_args(parser):
     parser.add_argument("--mode", required=True, choices=["init", "check", "dry-run"])

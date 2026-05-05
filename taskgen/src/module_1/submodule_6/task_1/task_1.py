@@ -26,19 +26,19 @@ def check_answer(const1, const2, operation):
     a = const1
     answer = []
     while a % const2:
-        if seed % 4 == 0: 
+        if operation == "++a":
             a += 1
             answer.append(a)
-        if seed % 4 == 1: 
+        elif operation == "a++":
             answer.append(a)
             a += 1
-        if seed % 4 == 2:
+        elif operation == "--a":
             a -= 1
             answer.append(a)
         else:
             answer.append(a)
             a -= 1
-    return " ".join(answer)
+    return " ".join(map(str, answer))
             
 
 class Module_1_Submodule_6_task_1(BaseTaskClass):
@@ -81,7 +81,7 @@ class Module_1_Submodule_6_task_1(BaseTaskClass):
                 showed_input="",
                 expected=expected,
                 compare_func=lambda output, exp: self._compare_default(
-                    output.strip(), self.file_name)
+                    output.strip(), exp)
             )
         ]
 

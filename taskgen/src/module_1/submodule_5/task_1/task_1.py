@@ -99,7 +99,7 @@ class Module_1_Submodule_5_task_1(BaseTaskClass):
                 showed_input="",
                 expected=expected,
                 compare_func=lambda output, exp: self._compare_default(
-                    output.strip(), self.file_name)
+                    output.strip(), exp)
             )
         ]
 
