@@ -2,7 +2,7 @@ from src.base_module.base_task import BaseTaskClass
 import random
 
 
-class Module2BuildStagesTask4(BaseTaskClass):
+class Module2_Submodule1_Task4(BaseTaskClass):
     """Задание №1.4.2"""
     
     def _generate_params(self):

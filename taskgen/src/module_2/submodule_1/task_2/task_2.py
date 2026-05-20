@@ -1,7 +1,7 @@
 from src.base_module.base_task import BaseTaskClass
 import random
 
-class Module2BuildStagesTask2(BaseTaskClass):
+class Module2_Submodule1_Task2(BaseTaskClass):
     """Задание №1.2.3"""
     _ACTIONS = (
         "проверяется синтаксис программы",

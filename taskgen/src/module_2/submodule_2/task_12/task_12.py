@@ -1,7 +1,7 @@
 from src.base_module.base_task import BaseTaskClass
 import random
 
-class Module2PreprocessorTask12(BaseTaskClass):
+class Module2_Submodule2_Task12(BaseTaskClass):
     """Задание №2.12.1"""
 
     _MACRO_NAMES = ["CONCAT", "PASTE", "JOIN", "MERGE", "CAT", "APPEND"]

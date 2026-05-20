@@ -1,7 +1,7 @@
 from src.base_module.base_task import BaseTaskClass
 import random
 
-class Module2BuildStagesTask1(BaseTaskClass):
+class Module2_Submodule1_Task1(BaseTaskClass):
     """Задание №1.1.3"""
     _ACTIONS = (
         "раскрываются директивы",

@@ -1,7 +1,7 @@
 from src.base_module.base_task import BaseTaskClass
 import random
 
-class Module2ComlpilerFlagsTask2(BaseTaskClass):
+class Module2_Submodule6_Task2(BaseTaskClass):
     """Задание №6.2.1"""
 
     _VERSIONS = [99, 11, 17]

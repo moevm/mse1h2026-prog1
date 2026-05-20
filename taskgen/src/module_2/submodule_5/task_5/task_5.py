@@ -1,7 +1,7 @@
 from src.base_module.base_task import BaseTaskClass
 import random
 
-class Module2LibrariesTask5(BaseTaskClass):
+class Module2_Submodule5_Task5(BaseTaskClass):
     """Задание №5.5.1"""
 
     _SRCS = ["main", "app", "test", "entry", "core", "driver"]

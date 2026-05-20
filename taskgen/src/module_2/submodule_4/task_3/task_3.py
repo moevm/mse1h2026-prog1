@@ -1,7 +1,7 @@
 from src.base_module.base_task import BaseTaskClass
 import random
 
-class Module2LinkingTask3(BaseTaskClass):
+class Module2_Submodule4_Task3(BaseTaskClass):
     """Задание №4.3.1"""
 
     _TYPES = ["int", "float", "double"]

@@ -1,7 +1,7 @@
 from src.base_module.base_task import BaseTaskClass
 import random
 
-class Module2HeaderFileTask1(BaseTaskClass):
+class Module2_Submodule3_Task1(BaseTaskClass):
     """Задание №3.1.1"""
 
     def __init__(self, seed: int):

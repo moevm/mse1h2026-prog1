@@ -1,5 +1,5 @@
-from .task_3_cli import cli_parser
-from .task_3 import Module2LibrariesTask3
+from .task_3_cli import Module2_Submodule5_Task3_CLIParser
+from .task_3 import Module2_Submodule5_Task3
 
 
-__all__ = ["cli_parser", "Module2LibrariesTask3"]
+__all__ = ["Module2_Submodule5_Task3_CLIParser", "Module2_Submodule5_Task3"]
