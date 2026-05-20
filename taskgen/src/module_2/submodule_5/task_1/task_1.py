@@ -1,7 +1,7 @@
 from src.base_module.base_task import BaseTaskClass
 import random
 
-class Module2LibrariesTask1(BaseTaskClass):
+class Module2_Submodule5_Task1(BaseTaskClass):
     """Задание №5.1.1"""
 
     _FILES = ["main", "utils", "config", "parser", "logger", "driver", "app"]

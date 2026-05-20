@@ -1,7 +1,7 @@
 from src.base_module.base_task import BaseTaskClass
 import random
 
-class Module2LinkingTask6(BaseTaskClass):
+class Module2_Submodule4_Task6(BaseTaskClass):
     """Задание №4.6.1"""
 
     _MAINS = ["main", "app", "program", "entry", "test"]

@@ -1,7 +1,7 @@
 from src.base_module.base_task import BaseTaskClass
 import random
 
-class Module2HeaderFileTask6(BaseTaskClass):
+class Module2_Submodule3_Task6(BaseTaskClass):
     """Задание №3.6.1"""
 
     _TRUE = [

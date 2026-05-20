@@ -1,15 +1,15 @@
-from .task_1 import Module2HeaderFileTask1
-from .task_2 import Module2HeaderFileTask2
-from .task_3 import Module2HeaderFileTask3
-from .task_4 import Module2HeaderFileTask4
-from .task_5 import Module2HeaderFileTask5
-from .task_6 import Module2HeaderFileTask6
+from .task_1 import Module2_Submodule3_Task1_CLIParser, Module2_Submodule3_Task1
+from .task_2 import Module2_Submodule3_Task2_CLIParser, Module2_Submodule3_Task2
+from .task_3 import Module2_Submodule3_Task3_CLIParser, Module2_Submodule3_Task3
+from .task_4 import Module2_Submodule3_Task4_CLIParser, Module2_Submodule3_Task4
+from .task_5 import Module2_Submodule3_Task5_CLIParser, Module2_Submodule3_Task5
+from .task_6 import Module2_Submodule3_Task6_CLIParser, Module2_Submodule3_Task6
 
 __all__ = [
-    "Module2HeaderFileTask1",
-    "Module2HeaderFileTask2",
-    "Module2HeaderFileTask3",
-    "Module2HeaderFileTask4",
-    "Module2HeaderFileTask5",
-    "Module2HeaderFileTask6"
+    "Module2_Submodule3_Task1_CLIParser","Module2_Submodule3_Task1",
+    "Module2_Submodule3_Task2_CLIParser","Module2_Submodule3_Task2",
+    "Module2_Submodule3_Task3_CLIParser","Module2_Submodule3_Task3",
+    "Module2_Submodule3_Task4_CLIParser","Module2_Submodule3_Task4",
+    "Module2_Submodule3_Task5_CLIParser","Module2_Submodule3_Task5",
+    "Module2_Submodule3_Task6_CLIParser","Module2_Submodule3_Task6"
 ]

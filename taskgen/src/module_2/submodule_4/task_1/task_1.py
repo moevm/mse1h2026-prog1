@@ -1,7 +1,7 @@
 from src.base_module.base_task import BaseTaskClass
 import random
 
-class Module2LinkingTask1(BaseTaskClass):
+class Module2_Submodule4_Task1(BaseTaskClass):
     """Задание №4.1.1"""
 
     _VARS = ["counter", "global_val", "status_flag", "max_size", "base_addr"]

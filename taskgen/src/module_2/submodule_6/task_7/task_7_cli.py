@@ -1,9 +1,9 @@
 from src.base_module.base_cli import CLIParser
-from .task_7 import Module2ComlpilerFlagsTask7
+from .task_7 import Module2_Submodule6_Task7
 
 
 def _factory(args):
-    return Module2ComlpilerFlagsTask7(seed=args.seed)
+    return Module2_Submodule6_Task7(seed=args.seed)
 
 
 def _add_args(parser):
@@ -13,7 +13,7 @@ def _add_args(parser):
     parser.set_defaults(func=_factory)
 
 
-cli_parser = CLIParser(
+Module2_Submodule6_Task7_CLIParser = CLIParser(
     name="module_2.submodule_6.task_7",
     add_cli_args=_add_args,
 )

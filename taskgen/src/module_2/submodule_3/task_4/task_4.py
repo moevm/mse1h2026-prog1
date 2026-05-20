@@ -2,7 +2,7 @@ from src.base_module.base_task import BaseTaskClass
 import random
 import string
 
-class Module2HeaderFileTask4(BaseTaskClass):
+class Module2_Submodule3_Task4(BaseTaskClass):
     """Задание №3.4.1"""
 
     _TYPES = ["int", "float", "double", "size_t", "long"]

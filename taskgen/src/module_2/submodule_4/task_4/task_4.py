@@ -1,7 +1,7 @@
 from src.base_module.base_task import BaseTaskClass
 import random
 
-class Module2LinkingTask4(BaseTaskClass):
+class Module2_Submodule4_Task4(BaseTaskClass):
     """Задание №4.4.1"""
 
     _FILES = ["utils", "helpers", "math_ops", "core", "driver"]
