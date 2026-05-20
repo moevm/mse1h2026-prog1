@@ -1,7 +1,7 @@
 from src.base_module.base_task import BaseTaskClass
 import random
 
-class Module2PreprocessorTask5(BaseTaskClass):
+class Module2_Submodule2_Task5(BaseTaskClass):
     """Задание №2.5.2"""
 
     _NAME_PREFIXES = ["MAX", "MIN", "SIZE", "COUNT", "LIMIT", "VALUE", "BUF", "FLAG"]

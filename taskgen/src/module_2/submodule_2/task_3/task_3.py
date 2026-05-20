@@ -1,7 +1,7 @@
 from src.base_module.base_task import BaseTaskClass
 import random
 
-class Module2PreprocessorTask3(BaseTaskClass):
+class Module2_Submodule2_Task3(BaseTaskClass):
     """Задание №2.3.2"""
 
     _NAME_PREFIXES = ["SUM", "ADD", "PLUS", "TOTAL", "COMBINE"]

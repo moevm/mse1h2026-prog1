@@ -1,7 +1,7 @@
 from src.base_module.base_task import BaseTaskClass
 import random
 
-class Module2PreprocessorTask7(BaseTaskClass):
+class Module2_Submodule2_Task7(BaseTaskClass):
     """Задание №2.7.1"""
 
     _NAME_PREFIXES = ["SQR", "SQ", "MUL", "X2", "SQUARE"]

@@ -1,7 +1,7 @@
 from src.base_module.base_task import BaseTaskClass
 import random
 
-class Module2PreprocessorTask11(BaseTaskClass):
+class Module2_Submodule2_Task11(BaseTaskClass):
     """Задание №2.11.1"""
 
     _MACRO_NAMES = ["STR", "TOSTR", "MKSTR", "STRIFY", "PRINT"]

@@ -1,6 +1,6 @@
 from src.base_module.base_task import BaseTaskClass
 
-class Module2PreprocessorTask4(BaseTaskClass):
+class Module2_Submodule2_Task4(BaseTaskClass):
     """Задание №2.4.1"""
 
     _EXPECTED_ANSWER = "нет"

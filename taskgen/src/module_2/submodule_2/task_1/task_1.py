@@ -1,7 +1,7 @@
 from src.base_module.base_task import BaseTaskClass
 import random
 
-class Module2PreprocessorTask1(BaseTaskClass):
+class Module2_Submodule2_Task1(BaseTaskClass):
     """Задание №2.1.4"""
     _TYPES = (
         "стандартных/системных",

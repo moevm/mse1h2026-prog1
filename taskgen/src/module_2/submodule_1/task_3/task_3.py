@@ -1,7 +1,7 @@
 from src.base_module.base_task import BaseTaskClass
 import random
 
-class Module2BuildStagesTask3(BaseTaskClass):
+class Module2_Submodule1_Task3(BaseTaskClass):
     """Задание №1.3.3"""
     _ACTIONS = (
         "ассемблерная инструкция переводится в машинный код",
