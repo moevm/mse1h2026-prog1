@@ -17,8 +17,8 @@
 ```c
 #include <stdlib.h>
 
-float* init_float_array(int size) {
-    float *arr = calloc(size, sizeof(float));
+int* create_zero_array(int size) {
+    int *arr = calloc(size, sizeof(int));
     return arr;
 }
 ```

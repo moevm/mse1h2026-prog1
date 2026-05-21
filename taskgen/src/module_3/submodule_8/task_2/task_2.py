@@ -1,0 +1,115 @@
+from typing import Optional
+import re
+import os
+import subprocess
+import tempfile
+from src.base_module.base_task import BaseTaskClass, TestItem, DEFAULT_TEST_NUM
+
+
+class Module3_Submodule8_Task2(BaseTaskClass):
+    def __init__(self, **kwargs):
+        default_params = {"tests_num": DEFAULT_TEST_NUM}
+        default_params.update(kwargs)
+        super().__init__(**default_params)
+        self.check_files = {"test_driver.c": self._get_test_driver_code()}
+
+    def _get_params(self) -> dict:
+        rem = self.seed % 2
+        if rem == 0:
+            return {"func": "safe_get_int", "type": "int", 
+                    "ok_msg": "OK: ", "oom_msg": "OOB: ", "fmt": "%d\n", 
+                    "default": "-1", "arr_init": "{10, 20, 30}", "valid_idx": 1, "valid_val": "20"}
+        else:
+            return {"func": "safe_get_float", "type": "float", 
+                    "ok_msg": "Value: ", "oom_msg": "Error: ", "fmt": "%.2f\n", 
+                    "default": "0.0f", "arr_init": "{1.1, 2.2, 3.3}", "valid_idx": 2, "valid_val": "3.30"}
+
+    def _get_test_driver_code(self) -> str:
+        p = self._get_params()
+        return f'''#include <stdio.h>
+
+void {p["func"]}({p["type"]} *arr, int size, int index);
+
+int main() {{
+    {p["type"]} arr[] = {p["arr_init"]};
+    int size = 3;
+
+    // Тест 1: Отрицательный индекс (OOB)
+    {p["func"]}(arr, size, -1);
+    
+    // Тест 2: Индекс >= size (OOB)
+    {p["func"]}(arr, size, 5);
+    
+    // Тест 3: Валидный индекс
+    {p["func"]}(arr, size, {p["valid_idx"]});
+
+    return 0;
+}}
+'''
+
+    def generate_task(self) -> str:
+        p = self._get_params()
+        fmt_display = p['fmt'].replace('\n', '\\n')
+        fmt_ok = f"{p['ok_msg']}{fmt_display}"
+        fmt_oom = f"{p['oom_msg']}{fmt_display}"
+        
+        return f"""### Тема: Выход за границы
+**Сложность:** средняя
+
+**Задание:**
+Реализуйте функцию `void {p["func"]}({p["type"]} *arr, int size, int index)`, которая безопасно обращается к элементу массива.
+- Если `index` выходит за допустимые пределы `[0, size)`, функция должна вывести `{p["oom_msg"]}`.
+- В противном случае — вывести `{p["ok_msg"]}` и значение `arr[index]`.
+
+**Формат вывода:**
+- При успехе: `{fmt_ok}`
+- При ошибке: `{fmt_oom}`
+"""
+
+    def _generate_tests(self):
+        p = self._get_params()
+        
+        if p["type"] == "float":
+            expected = f"{p['oom_msg']}0.00\n{p['oom_msg']}0.00\n{p['ok_msg']}3.30\n"
+        else:
+            expected = f"{p['oom_msg']}-1\n{p['oom_msg']}-1\n{p['ok_msg']}20\n"
+
+        self.tests = [TestItem(
+            input_str="",
+            showed_input="[скрыто]",
+            expected=expected,
+            compare_func=self._compare_default
+        )]
+
+    def check_sol_prereq(self) -> Optional[str]:
+        err = super().check_sol_prereq()
+        if err:
+            return err
+
+        p = self._get_params()
+        code = re.sub(r'//.*|/\*[\s\S]*?\*/', '', self.solution)
+
+        sig = rf'void\s+{p["func"]}\s*\(\s*{p["type"]}\s*\*\s*arr\s*,\s*int\s+size\s*,\s*int\s+index\s*\)'
+        if not re.search(sig, code):
+            return f"Ошибка: неверная сигнатура `void {p['func']}({p['type']} *arr, int size, int index)`."
+
+        if not re.search(r'index\s*<\s*0\s*\|\||index\s*>=\s*size', code):
+            return "Ошибка: необходимо проверить условие `index < 0 || index >= size`."
+
+        if not re.search(rf'\barr\s*\[\s*index\s*\]', code):
+            return "Ошибка: необходимо обращаться к элементу через `arr[index]`."
+
+        fmt_escaped = re.escape(p["fmt"].replace("\n", r"\n"))
+        if not re.search(rf'printf\s*\(.*{p["oom_msg"]}', code):
+            return f"Ошибка: вывод должен содержать `{p['oom_msg']}` при выходе за границы."
+        if not re.search(rf'printf\s*\(.*{p["ok_msg"]}', code):
+            return f"Ошибка: вывод должен содержать `{p['ok_msg']}` при успешном доступе."
+
+        return None
+
+    def _compare_default(self, output: str, expected: str) -> bool:
+        def normalize(s: str) -> str:
+            s = s.replace('\r\n', '\n').replace('\r', '\n')
+            lines = [line.rstrip() for line in s.split('\n')]
+            return '\n'.join(lines).strip()
+        return normalize(output) == normalize(expected)

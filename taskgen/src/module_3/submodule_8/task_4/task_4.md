@@ -19,16 +19,17 @@
 // Вариант 1: memcpy 
 #include <stdio.h>
 #include <string.h>
-void float_to_int_bits(float val) {
-    int res;
+void int_to_float_bits(int val) {
+    float res;
     memcpy(&res, &val, sizeof(res));
-    printf("As int: %d\n", res);
+    printf("As int: %g\n", res);
 }
 
 // Вариант 2: union
 #include <stdio.h>
-void float_to_int_bits(float val) {
-    union { float f; int i; } u = { .f = val };
-    printf("As int: %d\n", u.i);
+
+void int_to_float_bits(int val) {
+    union { int src; float dst; } u = { .src = val };
+    printf("As float: %g\n", u.dst);
 }
 ```
