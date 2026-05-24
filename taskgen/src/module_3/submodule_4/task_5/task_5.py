@@ -1,6 +1,9 @@
 from typing import Optional
 import random
 import re
+import subprocess
+import tempfile
+from pathlib import Path
 from src.base_module.base_task import BaseTaskClass, TestItem, DEFAULT_TEST_NUM
 
 
@@ -9,7 +12,7 @@ class Module3_Submodule4_Task5(BaseTaskClass):
         default_params = {"tests_num": DEFAULT_TEST_NUM}
         default_params.update(kwargs)
         super().__init__(**default_params)
-        self.check_files = {"test_driver.c": self._get_test_driver_code()}
+        self.check_files = {}
 
     def _get_test_driver_code(self) -> str:
         names = ["my_strchr", "custom_strchr", "find_first_char", "manual_strchr"]
@@ -21,7 +24,6 @@ char *{func_name}(char *s, char c);
 int main() {{
     char s[256];
     char c;
-    // Пробел перед %c обязателен: он пропускает перевод строки после слова
     if (scanf("%255s %c", s, &c) != 2) return 1;
     
     char *res = {func_name}(s, c);
@@ -42,6 +44,9 @@ int main() {{
 Реализуйте функцию из библиотеки `string.h` самостоятельно (без использования библиотечной версии).
 Напишите функцию `char *{func_name}(char *s, char c)`, которая находит первое вхождение символа `c` в строке `s`. 
 """
+
+    def compile(self) -> Optional[str]:
+        return None
 
     def _generate_tests(self):
         random.seed(self.seed)
@@ -94,6 +99,55 @@ int main() {{
             return "Ошибка: запрещено использовать <string.h> или библиотечную strchr."
 
         return None
+
+    def _build_program_source(self) -> str:
+        return (
+            f"{self.solution}\n\n"
+            f"{self._get_test_driver_code()}\n"
+        )
+
+    def _compile_and_run(self, test_index: int) -> tuple[bool, str]:
+        program_source = self._build_program_source()
+        test = self.tests[test_index]
+
+        with tempfile.TemporaryDirectory() as tmpdir:
+            tmp_path = Path(tmpdir)
+            src_path = tmp_path / "check_program.c"
+            exe_path = tmp_path / "check_program.x"
+
+            src_path.write_text(program_source, encoding="utf-8")
+            
+            compile_proc = subprocess.run(
+                ["gcc", "-std=c11", "-O2", "-Wall", str(src_path), "-o", str(exe_path)],
+                stdout=subprocess.PIPE, stderr=subprocess.STDOUT, check=False,
+            )
+            if compile_proc.returncode != 0:
+                return False, compile_proc.stdout.decode()
+
+            run_proc = subprocess.run(
+                [str(exe_path)],
+                input=test.input_str.encode(),
+                stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=False,
+            )
+            output = "\n".join(
+                part for part in (
+                    run_proc.stdout.decode().strip(),
+                    run_proc.stderr.decode().strip(),
+                ) if part
+            )
+            if run_proc.returncode != 0:
+                return False, output
+                
+            return True, output
+
+    def run_solution(self, test: TestItem) -> Optional[tuple[str, str]]:
+        test_index = self.tests.index(test)
+        ok, result = self._compile_and_run(test_index)
+        if ok:
+            if self._compare_default(result, test.expected):
+                return None
+            return result, test.expected
+        return result, test.expected
 
     def _compare_default(self, output: str, expected: str) -> bool:
         def normalize(s: str) -> str:
