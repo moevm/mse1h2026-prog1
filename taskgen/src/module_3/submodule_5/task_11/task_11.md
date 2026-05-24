@@ -25,4 +25,5 @@ void safe_free_int(int **buffer) {
         *buffer = NULL;
     }
 }
+```
 

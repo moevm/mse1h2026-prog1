@@ -22,3 +22,4 @@ int* safe_int_ptr(int val) {
     if (p) *p = val;
     return p;
 }
+```

@@ -39,3 +39,4 @@ void calc_via_table(int op, int a, int b) {
         printf("Result: %d\n", ops[op](a, b));
     }
 }
+```

@@ -25,6 +25,6 @@ void demo_const_ptrs(int val) {
     const int *ro_ptr = &val;
     int *const fix_ptr = &val;
     const int *const cc_ptr = &val;
-    
     printf("1: %d\n2: %d\n3: %d\n", *ro_ptr, *fix_ptr, *cc_ptr);
 }
+```
