@@ -1,6 +1,9 @@
 from typing import Optional
 import random
 import re
+import subprocess
+import tempfile
+from pathlib import Path
 from src.base_module.base_task import BaseTaskClass, TestItem, DEFAULT_TEST_NUM
 
 
@@ -9,7 +12,7 @@ class Module3_Submodule3_Task4(BaseTaskClass):
         default_params = {"tests_num": DEFAULT_TEST_NUM}
         default_params.update(kwargs)
         super().__init__(**default_params)
-        self.check_files = {"test_driver.c": self._get_test_driver_code()}
+        self.check_files = {}
 
     def _get_params(self):
         variant = self.seed % 4
@@ -47,6 +50,10 @@ int main() {{
 
 **Формат вывода:** `{print_format}`
 """
+
+    def compile(self) -> Optional[str]:
+        return None
+
     def _generate_tests(self):
         random.seed(self.seed)
         self.tests = []
@@ -87,6 +94,52 @@ int main() {{
             return f"Ошибка: printf должен использовать формат и выводить значения через arr[i] и *(arr + i)."
 
         return None
+
+    def _build_program_source(self) -> str:
+        return f"{self.solution}\n\n{self._get_test_driver_code()}"
+
+    def _compile_and_run(self, test_index: int) -> tuple[bool, str]:
+        program_source = self._build_program_source()
+        test = self.tests[test_index]
+
+        with tempfile.TemporaryDirectory() as tmpdir:
+            tmp_path = Path(tmpdir)
+            src_path = tmp_path / "check_program.c"
+            exe_path = tmp_path / "check_program.x"
+
+            src_path.write_text(program_source, encoding="utf-8")
+            
+            compile_proc = subprocess.run(
+                ["gcc", "-std=c11", "-O2", "-Wall", str(src_path), "-o", str(exe_path)],
+                stdout=subprocess.PIPE, stderr=subprocess.STDOUT, check=False,
+            )
+            if compile_proc.returncode != 0:
+                return False, compile_proc.stdout.decode()
+
+            run_proc = subprocess.run(
+                [str(exe_path)],
+                input=test.input_str.encode(),
+                stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=False,
+            )
+            output = "\n".join(
+                part for part in (
+                    run_proc.stdout.decode().strip(),
+                    run_proc.stderr.decode().strip(),
+                ) if part
+            )
+            if run_proc.returncode != 0:
+                return False, output
+                
+            return True, output
+
+    def run_solution(self, test: TestItem) -> Optional[tuple[str, str]]:
+        test_index = self.tests.index(test)
+        ok, result = self._compile_and_run(test_index)
+        if ok:
+            if self._compare_default(result, test.expected):
+                return None
+            return result, test.expected
+        return result, test.expected
 
     def _compare_default(self, output: str, expected: str) -> bool:
         def normalize(s: str) -> str:
