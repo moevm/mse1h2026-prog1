@@ -11,7 +11,7 @@ docker build -t taskgen ./taskgen
 
 ## Генерация задания(режим init)
 ```bash
-docker run --rm -it  taskgen test_task --mode init --seed 1223
+docker run --rm -it  taskgen module_3.submodule_5.task_4 --mode init --seed 15
 ```
 
 ## Проверка решения студента(режим check)
