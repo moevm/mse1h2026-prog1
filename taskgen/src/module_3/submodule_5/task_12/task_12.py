@@ -1,8 +1,8 @@
 from typing import Optional
 import re
-import os
 import subprocess
 import tempfile
+from pathlib import Path
 from src.base_module.base_task import BaseTaskClass, TestItem, DEFAULT_TEST_NUM
 
 
@@ -11,7 +11,7 @@ class Module3_Submodule5_Task12(BaseTaskClass):
         default_params = {"tests_num": DEFAULT_TEST_NUM}
         default_params.update(kwargs)
         super().__init__(**default_params)
-        self.check_files = {"test_driver.c": self._get_test_driver_code()}
+        self.check_files = {}
 
     def _get_params(self) -> dict:
         rem = self.seed % 3
@@ -21,26 +21,6 @@ class Module3_Submodule5_Task12(BaseTaskClass):
             return {"func": "safe_float_ptr", "type": "float", "val": "x", "fmt": "%.2f", "def": "3.14f"}
         else:
             return {"func": "safe_char_ptr", "type": "char", "val": "c", "fmt": "%c", "def": "'A'"}
-
-    def _get_test_driver_code(self) -> str:
-        p = self._get_params()
-        return f'''#include <stdio.h>
-#include <stdlib.h>
-
-{p["type"]} *{p["func"]}({p["type"]} {p["val"]});
-
-int main() {{
-    {p["type"]} test_val = {p["def"]};
-    {p["type"]} *ptr = {p["func"]}(test_val);
-    if (ptr) {{
-        printf("{p["fmt"]}", *ptr);
-        free(ptr);
-    }} else {{
-        printf("NULL\\n");
-    }}
-    return 0;
-}}
-'''
 
     def generate_task(self) -> str:
         p = self._get_params()
@@ -53,6 +33,9 @@ int main() {{
 Обязательно используйте динамическое выделение памяти (`malloc`/`calloc`), скопируйте значение и верните указатель.
 При ошибке выделения верните `NULL`.
 """
+
+    def compile(self) -> Optional[str]:
+        return None
 
     def _generate_tests(self):
         p = self._get_params()
@@ -98,7 +81,6 @@ int main() {{
                 rf'if\s*\(\s*NULL\s*==\s*{ptr_var}\s*\)',
                 rf'if\s*\(\s*{ptr_var}\s*!=\s*NULL\s*\)',
                 rf'if\s*\(\s*NULL\s*!=\s*{ptr_var}\s*\)',
-                rf'if\s*\(\s*!{ptr_var}\s*\)',          
             ]
             if not any(re.search(pat, code) for pat in null_checks):
                 return f"Ошибка: необходимо проверить переменную `{ptr_var}` (результат malloc) на NULL."
@@ -110,6 +92,65 @@ int main() {{
             return "Ошибка: функция должна возвращать указатель."
 
         return None
+
+    def _build_program_source(self) -> str:
+        p = self._get_params()
+        return (
+            "#include <stdio.h>\n"
+            "#include <stdlib.h>\n\n"
+            f"{self.solution}\n\n"
+            "int main(void) {\n"
+            f'    {p["type"]} test_val = {p["def"]};\n'
+            f'    {p["type"]} *ptr = {p["func"]}(test_val);\n'
+            f'    if (ptr) {{\n'
+            f'        printf("{p["fmt"]}", *ptr);\n'
+            f'        free(ptr);\n'
+            f'    }} else {{\n'
+            f'        printf("NULL\\n");\n'
+            f'    }}\n'
+            "    return 0;\n"
+            "}\n"
+        )
+
+    def _compile_and_run(self) -> tuple[bool, str]:
+        program_source = self._build_program_source()
+
+        with tempfile.TemporaryDirectory() as tmpdir:
+            tmp_path = Path(tmpdir)
+            src_path = tmp_path / "check_program.c"
+            exe_path = tmp_path / "check_program.x"
+
+            src_path.write_text(program_source, encoding="utf-8")
+            
+            compile_proc = subprocess.run(
+                ["gcc", "-std=c11", "-O2", "-Wall", str(src_path), "-o", str(exe_path)],
+                stdout=subprocess.PIPE, stderr=subprocess.STDOUT, check=False,
+            )
+            if compile_proc.returncode != 0:
+                return False, compile_proc.stdout.decode()
+
+            run_proc = subprocess.run(
+                [str(exe_path)],
+                stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=False,
+            )
+            output = "\n".join(
+                part for part in (
+                    run_proc.stdout.decode().strip(),
+                    run_proc.stderr.decode().strip(),
+                ) if part
+            )
+            if run_proc.returncode != 0:
+                return False, output
+                
+            return True, output
+
+    def run_solution(self, test: TestItem) -> Optional[tuple[str, str]]:
+        ok, result = self._compile_and_run()
+        if ok:
+            if self._compare_default(result, test.expected):
+                return None
+            return result, test.expected
+        return result, test.expected
 
     def _compare_default(self, output: str, expected: str) -> bool:
         def normalize(s: str) -> str:

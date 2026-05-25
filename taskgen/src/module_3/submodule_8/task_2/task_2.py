@@ -1,8 +1,8 @@
 from typing import Optional
 import re
-import os
 import subprocess
 import tempfile
+from pathlib import Path
 from src.base_module.base_task import BaseTaskClass, TestItem, DEFAULT_TEST_NUM
 
 
@@ -11,7 +11,7 @@ class Module3_Submodule8_Task2(BaseTaskClass):
         default_params = {"tests_num": DEFAULT_TEST_NUM}
         default_params.update(kwargs)
         super().__init__(**default_params)
-        self.check_files = {"test_driver.c": self._get_test_driver_code()}
+        self.check_files = {}
 
     def _get_params(self) -> dict:
         rem = self.seed % 2
@@ -23,29 +23,6 @@ class Module3_Submodule8_Task2(BaseTaskClass):
             return {"func": "safe_get_float", "type": "float", 
                     "ok_msg": "Value: ", "oom_msg": "Error: ", "fmt": "%.2f\n", 
                     "default": "0.0f", "arr_init": "{1.1, 2.2, 3.3}", "valid_idx": 2, "valid_val": "3.30"}
-
-    def _get_test_driver_code(self) -> str:
-        p = self._get_params()
-        return f'''#include <stdio.h>
-
-void {p["func"]}({p["type"]} *arr, int size, int index);
-
-int main() {{
-    {p["type"]} arr[] = {p["arr_init"]};
-    int size = 3;
-
-    // Тест 1: Отрицательный индекс (OOB)
-    {p["func"]}(arr, size, -1);
-    
-    // Тест 2: Индекс >= size (OOB)
-    {p["func"]}(arr, size, 5);
-    
-    // Тест 3: Валидный индекс
-    {p["func"]}(arr, size, {p["valid_idx"]});
-
-    return 0;
-}}
-'''
 
     def generate_task(self) -> str:
         p = self._get_params()
@@ -65,6 +42,9 @@ int main() {{
 - При успехе: `{fmt_ok}`
 - При ошибке: `{fmt_oom}`
 """
+
+    def compile(self) -> Optional[str]:
+        return None
 
     def _generate_tests(self):
         p = self._get_params()
@@ -99,13 +79,67 @@ int main() {{
         if not re.search(rf'\barr\s*\[\s*index\s*\]', code):
             return "Ошибка: необходимо обращаться к элементу через `arr[index]`."
 
-        fmt_escaped = re.escape(p["fmt"].replace("\n", r"\n"))
         if not re.search(rf'printf\s*\(.*{p["oom_msg"]}', code):
             return f"Ошибка: вывод должен содержать `{p['oom_msg']}` при выходе за границы."
         if not re.search(rf'printf\s*\(.*{p["ok_msg"]}', code):
             return f"Ошибка: вывод должен содержать `{p['ok_msg']}` при успешном доступе."
 
         return None
+
+    def _build_program_source(self) -> str:
+        p = self._get_params()
+        return (
+            "#include <stdio.h>\n\n"
+            f"{self.solution}\n\n"
+            "int main(void) {\n"
+            f'    {p["type"]} arr[] = {p["arr_init"]};\n'
+            f'    int size = 3;\n\n'
+            f'    {p["func"]}(arr, size, -1);\n'
+            f'    {p["func"]}(arr, size, 5);\n'
+            f'    {p["func"]}(arr, size, {p["valid_idx"]});\n\n'
+            "    return 0;\n"
+            "}\n"
+        )
+
+    def _compile_and_run(self) -> tuple[bool, str]:
+        program_source = self._build_program_source()
+
+        with tempfile.TemporaryDirectory() as tmpdir:
+            tmp_path = Path(tmpdir)
+            src_path = tmp_path / "check_program.c"
+            exe_path = tmp_path / "check_program.x"
+
+            src_path.write_text(program_source, encoding="utf-8")
+            
+            compile_proc = subprocess.run(
+                ["gcc", "-std=c11", "-O2", "-Wall", str(src_path), "-o", str(exe_path)],
+                stdout=subprocess.PIPE, stderr=subprocess.STDOUT, check=False,
+            )
+            if compile_proc.returncode != 0:
+                return False, compile_proc.stdout.decode()
+
+            run_proc = subprocess.run(
+                [str(exe_path)],
+                stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=False,
+            )
+            output = "\n".join(
+                part for part in (
+                    run_proc.stdout.decode().strip(),
+                    run_proc.stderr.decode().strip(),
+                ) if part
+            )
+            if run_proc.returncode != 0:
+                return False, output
+                
+            return True, output
+
+    def run_solution(self, test: TestItem) -> Optional[tuple[str, str]]:
+        ok, result = self._compile_and_run()
+        if ok:
+            if self._compare_default(result, test.expected):
+                return None
+            return result, test.expected
+        return result, test.expected
 
     def _compare_default(self, output: str, expected: str) -> bool:
         def normalize(s: str) -> str:
