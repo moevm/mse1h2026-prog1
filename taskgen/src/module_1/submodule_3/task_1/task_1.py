@@ -27,7 +27,6 @@ def generate_params(seed: int) -> tuple[str, str, str, str]:
     value1 = generate_arith_expr(rng)
     value2 = generate_arith_expr(rng)
     value3 = generate_arith_expr(rng)
-
     expr_templates = [
         "A + B * C",
         "A * B - C",
@@ -50,13 +49,10 @@ def check_answer(value1: str, value2: str, value3: str, expression: str) -> str:
 
 class Module_1_Submodule_3_task_1(BaseTaskClass):
 
-    def __init__(
-            self,
-            *args,
-            **kwargs
-    ):
+    def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.value1, self.value2, self.value3, self.expression = generate_params(self.seed)
+        self.student_solution = ""
 
     def generate_task(self) -> str:
         return (
@@ -82,7 +78,24 @@ class Module_1_Submodule_3_task_1(BaseTaskClass):
         ]
 
     def run_solution(self, test: TestItem):
-        student_answer = self.solution.strip()
+        student_answer = self.student_solution.strip()
         if test.compare_func(student_answer, test.expected):
             return None
         return student_answer, test.expected
+
+    def load_student_solution(self, solution):
+        if not solution.strip():
+            raise ValueError("Решение пустое.")
+        self.student_solution = solution.strip()
+
+    def check(self):
+        try:
+            self.generate_task()
+            expected = check_answer(self.value1, self.value2, self.value3, self.expression)
+            student = self.student_solution.strip()
+            if self._compare_default(student, expected):
+                return True, "OK: Верный ответ."
+            else:
+                return False, "FAIL: Ответ неверный."
+        except Exception as e:
+            return False, f"FAIL: {str(e)}"

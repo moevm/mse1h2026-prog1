@@ -13,16 +13,4 @@ printf("%d %u", a >> s, b >> s);
 
 - Уникальными становятся значения `A`, `S`.
 
-- Ввод: пуст. Вывод при `A = -13`, `S = 2`:
-```
-#include <stdio.h>
-
-int main()
-{
-    signed int a = -13;
-    int s = 2;
-    unsigned int b = (unsigned int)a;
-    printf("%d %u", a >> s, b >> s);
-    return 0;
-}
-```
+- Ввод: пуст. Вывод при `A = -13`, `S = 2`: `-4 1073741820`.

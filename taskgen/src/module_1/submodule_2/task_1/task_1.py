@@ -3,45 +3,81 @@ import random
 from src.base_module.base_task import BaseTaskClass, TestItem
 
 
-def make_number(rng: random.Random) -> tuple[str, bool]:
-    value = rng.randint(-20, 20)
-    return str(value), value != 0
+def generate_true_expr(used: set, rng: random.Random) -> str:
+    while True:
+        choice = rng.choice(['num', 'sum', 'diff'])
+        if choice == 'num':
+            val = rng.randint(1, 20)
+            expr = str(val)
+        elif choice == 'sum':
+            a = rng.randint(0, 20)
+            b = rng.randint(0, 20 - a)
+            if a + b == 0:
+                continue
+            expr = f"{a} + {b}"
+        else:
+            a = rng.randint(1, 20)
+            b = rng.randint(0, a - 1)
+            expr = f"{a} - {b}"
+        if expr not in used:
+            used.add(expr)
+            return expr
 
 
-def make_sum(rng: random.Random) -> tuple[str, bool]:
-    left = rng.randint(-20, 20)
-    right = rng.randint(-20, 20)
-    return f"{left} + {right}", (left + right) != 0
-
-
-def make_diff(rng: random.Random) -> tuple[str, bool]:
-    left = rng.randint(-20, 20)
-    right = rng.randint(-20, 20)
-    return f"{left} - {right}", (left - right) != 0
-
-
-def make_null() -> tuple[str, bool]:
-    return "NULL", False
+def generate_false_expr(used: set, rng: random.Random, null_used: bool) -> tuple[str, bool]:
+    types = ['zero', 'zero_zero', 'self_diff']
+    if not null_used:
+        types.append('null')
+    rng.shuffle(types)
+    for typ in types:
+        if typ == 'zero':
+            expr = "0"
+            if expr not in used:
+                used.add(expr)
+                return expr, null_used
+        elif typ == 'null':
+            expr = "NULL"
+            if expr not in used:
+                used.add(expr)
+                return expr, True
+        elif typ == 'zero_zero':
+            expr = "0 + 0"
+            if expr not in used:
+                used.add(expr)
+                return expr, null_used
+        elif typ == 'self_diff':
+            a = rng.randint(1, 10)
+            expr = f"{a} - {a}"
+            if expr not in used:
+                used.add(expr)
+                return expr, null_used
+    while True:
+        a = rng.randint(1, 10)
+        expr = f"{a} - {a}"
+        if expr not in used:
+            used.add(expr)
+            return expr, null_used
 
 
 def generate_expressions(seed: int) -> tuple[list[str], list[int]]:
     rng = random.Random(seed)
-    makers = [make_number, make_sum, make_diff]
+    true_count = rng.randint(1, 3)
+    used = set()
+    true_exprs = []
+    for _ in range(true_count):
+        expr = generate_true_expr(used, rng)
+        true_exprs.append(expr)
 
-    expressions: list[tuple[str, bool]] = [make_null()]
-    while len(expressions) < 8:
-        maker = rng.choice(makers + [make_null])
-        expr = maker(rng) if maker is not make_null else make_null()
-        expressions.append(expr)
+    false_exprs = []
+    null_used = False
+    while len(false_exprs) < (8 - true_count):
+        expr, null_used = generate_false_expr(used, rng, null_used)
+        false_exprs.append(expr)
 
-    rng.shuffle(expressions)
-
-    true_indices = [i + 1 for i, (_, is_true) in enumerate(expressions) if is_true]
-    if not true_indices:
-        expressions[0] = ("1", True)
-        true_indices = [1]
-
-    return [expr for expr, _ in expressions], true_indices
+    all_exprs = true_exprs + false_exprs
+    rng.shuffle(all_exprs)
+    true_indices = [i + 1 for i, expr in enumerate(all_exprs) if expr in true_exprs]
+    return all_exprs, true_indices
 
 
 def check_answer(true_indices: list[int]) -> str:
@@ -49,14 +85,10 @@ def check_answer(true_indices: list[int]) -> str:
 
 
 class Module_1_Submodule_2_task_1(BaseTaskClass):
-
-    def __init__(
-            self,
-            *args,
-            **kwargs
-    ):
+    def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.expressions, self.true_indices = generate_expressions(self.seed)
+        self.student_solution = ""
 
     def generate_task(self) -> str:
         lines = [
@@ -81,7 +113,24 @@ class Module_1_Submodule_2_task_1(BaseTaskClass):
         ]
 
     def run_solution(self, test: TestItem):
-        student_answer = self.solution.strip()
+        student_answer = self.student_solution.strip()
         if test.compare_func(student_answer, test.expected):
             return None
         return student_answer, test.expected
+
+    def load_student_solution(self, solution):
+        if not solution.strip():
+            raise ValueError("Решение пустое.")
+        self.student_solution = solution.strip()
+
+    def check(self):
+        try:
+            expected = check_answer(self.true_indices)
+            student = self.student_solution.strip()
+            student_norm = " ".join(student.split())
+            if student_norm == expected:
+                return True, "OK: Верный ответ."
+            else:
+                return False, f"FAIL: Ответ неверный."
+        except Exception as e:
+            return False, f"FAIL: {str(e)}"

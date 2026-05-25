@@ -26,6 +26,7 @@ class Module_1_Submodule_1_task_1(BaseTaskClass):
         super().__init__(*args, **kwargs)
 
         self.src_name = generate_src_name(self.seed)
+        self.student_solution = ""
 
     def generate_task(self) -> str:
         return (
@@ -50,8 +51,25 @@ class Module_1_Submodule_1_task_1(BaseTaskClass):
             )
         ]
 
+    def load_student_solution(self, solution):
+        if not solution.strip():
+            raise ValueError("Решение пустое.")
+        self.student_solution = solution.strip()
+
     def run_solution(self, test: TestItem):
-        student_answer = self.solution.strip()
+        student_answer = self.student_solution
         if test.compare_func(student_answer, test.expected):
             return None
         return student_answer, test.expected
+
+    def check(self):
+        try:
+            self.generate_task()
+            expected = check_answer(self.src_name)
+            student = self.student_solution.strip()
+            if compare_answer(student, expected):
+                return True, "OK: Верный ответ."
+            else:
+                return False, f"FAIL: Ответ неверный."
+        except Exception as e:
+            return False, f"FAIL: {str(e)}"

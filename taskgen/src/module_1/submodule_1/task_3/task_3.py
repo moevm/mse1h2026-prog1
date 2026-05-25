@@ -10,7 +10,6 @@ def generate_argv(seed: int) -> list[str]:
     rng = random.Random(seed)
     argv = ["./a.out"]
     extra_count = rng.randint(2, 6)
-
     for i in range(extra_count):
         if i % 2 == 0 and rng.random() < 0.5:
             argv.append(rng.choice(FLAGS))
@@ -18,20 +17,16 @@ def generate_argv(seed: int) -> list[str]:
             argv.append(str(rng.randint(0, 99)))
     return argv
 
-
 def check_answer(argv: list[str]) -> str:
     return str(len(argv))
 
 
 class Module_1_Submodule_1_task_3(BaseTaskClass):
 
-    def __init__(
-            self,
-            *args,
-            **kwargs
-    ):
+    def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.argv = generate_argv(self.seed)
+        self.student_solution = ""
 
     def generate_task(self) -> str:
         argv_text = " ".join(self.argv)
@@ -59,7 +54,24 @@ class Module_1_Submodule_1_task_3(BaseTaskClass):
         ]
 
     def run_solution(self, test: TestItem):
-        student_answer = self.solution.strip()
+        student_answer = self.student_solution.strip()
         if test.compare_func(student_answer, test.expected):
             return None
         return student_answer, test.expected
+
+    def load_student_solution(self, solution):
+        if not solution.strip():
+            raise ValueError("Решение пустое.")
+        self.student_solution = solution.strip()
+
+    def check(self):
+        try:
+            self.generate_task()
+            expected = check_answer(self.argv)
+            student = self.student_solution.strip()
+            if student == expected:
+                return True, "OK: Верный ответ."
+            else:
+                return False, "FAIL: Ответ неверный."
+        except Exception as e:
+            return False, f"FAIL: {str(e)}"

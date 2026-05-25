@@ -1,0 +1,22 @@
+import argparse
+from src.base_module.base_cli import CLIParser, add_common_cli_args, get_common_cli_args
+from .task_6 import Module_1_Submodule_1_task_6
+
+
+def create_task_test(args) -> Module_1_Submodule_1_task_6:
+    task = Module_1_Submodule_1_task_6(
+        **get_common_cli_args(args),
+    )
+    return task
+
+
+def add_cli_args_test(parser: argparse.ArgumentParser):
+    add_common_cli_args(parser)
+    parser.set_defaults(func=create_task_test)
+
+
+Module_1_Submodule_1_task_6_CLI_Parser = CLIParser(
+    name="module_1.submodule_1.task_6",
+    add_cli_args=add_cli_args_test,
+)
+

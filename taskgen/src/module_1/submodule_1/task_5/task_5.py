@@ -17,13 +17,10 @@ def check_answer(const1: int, const2: float, const3: str) -> str:
 
 class Module_1_Submodule_1_task_5(BaseTaskClass):
 
-    def __init__(
-            self,
-            *args,
-            **kwargs
-    ):
+    def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.const1, self.const2, self.const3 = generate_consts(self.seed)
+        self.student_solution = ""
 
     def generate_task(self) -> str:
         return (
@@ -49,15 +46,29 @@ class Module_1_Submodule_1_task_5(BaseTaskClass):
                 input_str="",
                 showed_input="",
                 expected=expected,
-                compare_func=lambda output, exp: self._compare_default(
-                    output.strip(),
-                    exp
-                )
+                compare_func=lambda output, exp: self._compare_default(output.strip(), exp)
             )
         ]
 
     def run_solution(self, test: TestItem):
-        student_answer = self.solution.strip()
+        student_answer = self.student_solution.strip()
         if test.compare_func(student_answer, test.expected):
             return None
         return student_answer, test.expected
+
+    def load_student_solution(self, solution):
+        if not solution.strip():
+            raise ValueError("Решение пустое.")
+        self.student_solution = solution.strip()
+
+    def check(self):
+        try:
+            self.generate_task()
+            expected = check_answer(self.const1, self.const2, self.const3)
+            student = self.student_solution.strip()
+            if self._compare_default(student, expected):
+                return True, "OK: Верный ответ."
+            else:
+                return False, "FAIL: Ответ неверный."
+        except Exception as e:
+            return False, f"FAIL: {str(e)}"

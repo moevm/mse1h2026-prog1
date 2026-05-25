@@ -12,7 +12,6 @@ def generate_params(seed: int) -> tuple[str, str, str, str, str]:
     type1 = rng.choice(TYPES)
     type2 = rng.choice(TYPES)
     type3 = rng.choice(TYPES)
-
     if ret_type in ("float", "double"):
         answer = f"{rng.randint(1, 99)}.{rng.randint(0, 9)}"
     elif ret_type == "char":
@@ -32,13 +31,10 @@ def normalize_decl(s: str) -> str:
 
 class Module_1_Submodule_1_task_4(BaseTaskClass):
 
-    def __init__(
-            self,
-            *args,
-            **kwargs
-    ):
+    def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.ret_type, self.type1, self.type2, self.type3, self.answer = generate_params(self.seed)
+        self.student_solution = ""
 
     def generate_task(self) -> str:
         return (
@@ -65,7 +61,24 @@ class Module_1_Submodule_1_task_4(BaseTaskClass):
         ]
 
     def run_solution(self, test: TestItem):
-        student_answer = self.solution.strip()
+        student_answer = self.student_solution.strip()
         if test.compare_func(student_answer, test.expected):
             return None
         return student_answer, test.expected
+
+    def load_student_solution(self, solution):
+        if not solution.strip():
+            raise ValueError("Решение пустое.")
+        self.student_solution = solution.strip()
+
+    def check(self):
+        try:
+            self.generate_task()
+            expected = check_answer(self.ret_type, self.type1, self.type2, self.type3)
+            student = self.student_solution.strip()
+            if normalize_decl(student) == normalize_decl(expected):
+                return True, "OK: Верный ответ."
+            else:
+                return False, "FAIL: Ответ неверный."
+        except Exception as e:
+            return False, f"FAIL: {str(e)}"
